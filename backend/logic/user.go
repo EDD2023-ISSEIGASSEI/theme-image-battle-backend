@@ -33,3 +33,32 @@ func (ul *UserLigic) Create() error {
 
 	return nil
 }
+
+func (ul *UserLigic) SelectByNameAndPass() error {
+	log.Debugln("Start select user")
+
+	query := fmt.Sprintf("select id, name, password, line_uid from users where name = ? and password = ?")
+	log.Debugln("--- select user query ---")
+	log.Debugln(query)
+	log.Debugln("-------------------------")
+
+	rows, err := db.Db.Query(query, ul.User.Name, ul.User.Password)
+	if err != nil {
+		log.Errorln("Exec error: ", err)
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id int
+		var lineUid *string
+		err = rows.Scan(&id, &ul.User.Name, &ul.User.Password, &lineUid)
+		if err != nil {
+			log.Errorln("Exec error: ", err)
+			return err
+		}
+		ul.User.Id = &id
+		ul.User.LineUid = lineUid
+	}
+
+	return nil
+}

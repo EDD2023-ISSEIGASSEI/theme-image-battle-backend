@@ -38,3 +38,25 @@ func (*UserHandler) Create(ctx *gin.Context) {
 	r := util.Ok(nil)
 	ctx.JSON(r.StatusCode, r.Message)
 }
+
+func (*UserHandler) Login(ctx *gin.Context) {
+	var req UserRequest
+	err := ctx.Bind(&req)
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	ul := logic.UserLigic{User: &model.User{Name: req.Name, Password: req.Password}}
+	err = ul.SelectByNameAndPass()
+	if err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	r := util.Ok(nil)
+	ctx.JSON(r.StatusCode, gin.H{"user": ul.User})
+}

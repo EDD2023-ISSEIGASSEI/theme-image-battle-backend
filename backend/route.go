@@ -16,4 +16,5 @@ func DefineRoutes(r gin.IRouter) {
 
 	userHandler := handler.UserHandler{}
 	r.POST("/user", userHandler.Create)
+	r.POST("/login", userHandler.Login)
 }
