@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: line-bot-otp-db
+    build:
+      context: ./
+      dockerfile: ./docker/db/Dockerfile
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+  server:
+    container_name: line-bot-otp-server
+    build:
+      context: ./
+      dockerfile: ./docker/server/Dockerfile
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    depends_on:
+      - db
+    volumes:
+      - ./:/go/app
+    tty: true
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST} 
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      SERVER_PORT: ${SERVER_PORT}
