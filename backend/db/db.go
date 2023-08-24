@@ -3,8 +3,9 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -24,6 +25,6 @@ func Init() {
 	if err != nil {
 		panic(err.Error())
 	}
-	log.Println("connected to db")
+	log.Debugln("connected to db")
 	Db.SetMaxOpenConns(25)
 }

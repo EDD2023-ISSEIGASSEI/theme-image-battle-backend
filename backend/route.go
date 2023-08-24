@@ -1,6 +1,7 @@
 package main
 
 import (
+	"line-bot-otp-back/handler"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,4 +13,7 @@ func DefineRoutes(r gin.IRouter) {
 			"message": "ok",
 		})
 	})
+
+	userHandler := handler.UserHandler{}
+	r.POST("/user", userHandler.Create)
 }
