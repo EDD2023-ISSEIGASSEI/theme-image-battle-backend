@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"database/sql"
@@ -11,7 +11,7 @@ import (
 
 var Db *sql.DB
 
-func DbInit() {
+func Init() {
 	db_user := os.Getenv("MYSQL_USER")
 	db_password := os.Getenv("MYSQL_PASSWORD")
 	db_host := os.Getenv("MYSQL_HOST")

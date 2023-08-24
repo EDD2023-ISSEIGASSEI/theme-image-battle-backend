@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"line-bot-otp-back/db"
+
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	DbInit()
+	db.Init()
 	engine := gin.Default()
 	DefineRoutes(engine)
 	fmt.Printf("hoge: %s\n", os.Getenv("SERVER_PORT"))
