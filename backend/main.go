@@ -2,14 +2,16 @@ package main
 
 import (
 	"fmt"
+	"line-bot-otp-back/db"
 	"os"
 
-	"line-bot-otp-back/db"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	log.SetLevel(log.DebugLevel)
 	db.Init()
 	engine := gin.Default()
 	DefineRoutes(engine)

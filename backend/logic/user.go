@@ -17,7 +17,7 @@ func (ul *UserLigic) Create() error {
 	user := ul.User
 
 	query := fmt.Sprintf("insert into users (name, password) values (?, ?)")
-	log.Debugln("--- bulk insert query ---")
+	log.Debugln("--- insert query ---")
 	log.Debugln(query)
 	log.Debugln("-------------------------")
 	stmt, err := db.Db.Prepare(query)
