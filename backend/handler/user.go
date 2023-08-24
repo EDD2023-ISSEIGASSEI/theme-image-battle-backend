@@ -17,7 +17,7 @@ type UserRequest struct {
 	Password string `json:"password"`
 }
 
-func (*UserHandler) Create(ctx *gin.Context) {
+func (*UserHandler) SignUp(ctx *gin.Context) {
 	var req UserRequest
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -39,7 +39,7 @@ func (*UserHandler) Create(ctx *gin.Context) {
 	ctx.JSON(r.StatusCode, r.Message)
 }
 
-func (*UserHandler) Login(ctx *gin.Context) {
+func (*UserHandler) SignIn(ctx *gin.Context) {
 	var req UserRequest
 	err := ctx.Bind(&req)
 	if err != nil {
