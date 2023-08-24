@@ -12,13 +12,13 @@ import (
 
 type UserHandler struct{}
 
-type UserCreateRequest struct {
+type UserRequest struct {
 	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 
 func (*UserHandler) Create(ctx *gin.Context) {
-	var req UserCreateRequest
+	var req UserRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		s := err.Error()
