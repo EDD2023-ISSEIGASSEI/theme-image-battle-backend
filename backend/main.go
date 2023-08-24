@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	DbInit()
 	engine := gin.Default()
 	DefineRoutes(engine)
 	fmt.Printf("hoge: %s\n", os.Getenv("SERVER_PORT"))
