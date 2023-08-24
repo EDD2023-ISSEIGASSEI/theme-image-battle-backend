@@ -1,0 +1,6 @@
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(64),
+  password VARCHAR(128),
+  line_uid VARCHAR(64)
+);
