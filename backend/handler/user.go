@@ -5,6 +5,7 @@ import (
 	"line-bot-otp-back/model"
 	"line-bot-otp-back/util"
 
+	"github.com/line/line-bot-sdk-go/v7/linebot"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
@@ -48,7 +49,7 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 	ctx.JSON(r.StatusCode, gin.H{"sessionId": sl.Session.Uuid})
 }
 
-func (*UserHandler) SignIn(ctx *gin.Context) {
+func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 	var req UserRequest
 	err := ctx.Bind(&req)
 	if err != nil {
@@ -73,10 +74,14 @@ func (*UserHandler) SignIn(ctx *gin.Context) {
 		},
 	}
 	sl.CreateSession()
-	log.Debugln("OTP:: ", sl.Session.Otp)
+	message := linebot.NewTextMessage("↓ワンタイムパスワード↓\n" + sl.Session.Otp)
+	_, err = bot.PushMessage(*sl.Session.User.LineUid, message).Do()
+	if err != nil {
+		log.Errorln(err.Error())
+	}
 
 	r := util.Ok(nil)
-	ctx.JSON(r.StatusCode, gin.H{"user": ul.User})
+	ctx.JSON(r.StatusCode, gin.H{"sessionId": sl.Session.Uuid})
 }
 
 type LineRegistrationRequest struct {

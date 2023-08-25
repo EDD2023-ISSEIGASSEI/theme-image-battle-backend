@@ -18,7 +18,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	userHandler := handler.UserHandler{}
 	r.POST("/signUp", userHandler.SignUp)
 	r.POST("/lineRegistration", userHandler.LineRegistration)
-	r.POST("/signIn", userHandler.SignIn)
+	r.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
 	r.POST("/checkOtp", userHandler.CheckOtp)
 
 	lineDemoHandler := handler.LineDemoHandler{}
