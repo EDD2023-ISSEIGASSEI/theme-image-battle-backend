@@ -113,18 +113,19 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 	}
 
 	f, err = sl.LineRegisterByOtp(req.Otp)
-	if !f && err != nil {
+	if !f && err == nil {
 		s := "InvalidOTP"
 		r := util.BadRequest(&s)
-		log.Errorln("[Error]request parse error: ", err.Error())
 		ctx.JSON(r.StatusCode, r.Message)
 		return
 	}
-	if f && err != nil {
+	if err != nil {
 		log.Errorln("[Error]exec error: ", err.Error())
 		r := util.InternalServerError(nil)
 		ctx.JSON(r.StatusCode, r.Message)
 	}
+
+	sl.DeleteSession()
 
 	ul := logic.UserLigic{User: &sl.Session.User}
 	err = ul.Create()
