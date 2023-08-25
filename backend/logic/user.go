@@ -26,10 +26,17 @@ func (ul *UserLigic) Create() error {
 		return err
 	}
 
-	if _, err := stmt.Exec(user.Name, user.Password, user.LineUid); err != nil {
+	result, err := stmt.Exec(user.Name, user.Password, user.LineUid)
+	if err != nil {
 		log.Errorln("Exec error: ", err)
 		return err
 	}
+	insertedId, err := result.LastInsertId()
+	if err != nil {
+		log.Error(err.Error())
+		return err
+	}
+	ul.User.Id = &insertedId
 
 	return nil
 }
@@ -49,7 +56,7 @@ func (ul *UserLigic) SelectByNameAndPass() error {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var id int
+		var id int64
 		var lineUid *string
 		err = rows.Scan(&id, &ul.User.Name, &ul.User.Password, &lineUid)
 		if err != nil {
