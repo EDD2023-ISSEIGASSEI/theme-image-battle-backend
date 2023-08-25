@@ -16,5 +16,9 @@ func DefineRoutes(r gin.IRouter) {
 
 	userHandler := handler.UserHandler{}
 	r.POST("/signUp", userHandler.SignUp)
+	r.POST("/lineRegistration", userHandler.LineRegistration)
 	r.POST("/signIn", userHandler.SignIn)
+
+	lineDemoHandler := handler.LineDemoHandler{}
+	r.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
 }
