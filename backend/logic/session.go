@@ -23,18 +23,22 @@ type LineSessionLogic struct {
 }
 
 func generateOtp() (*string, error) {
+	ctx := context.Background()
 	var buffer bytes.Buffer
-
-	for i := 0; i < 6; i++ {
-		n, err := rand.Int(rand.Reader, big.NewInt(10))
-		if err != nil {
-			return nil, err
+	for {
+		for i := 0; i < 6; i++ {
+			n, err := rand.Int(rand.Reader, big.NewInt(10))
+			if err != nil {
+				return nil, err
+			}
+			buffer.WriteString(n.String())
 		}
-		buffer.WriteString(n.String())
+		otp := buffer.String()
+		res := db.Redis.Exists(ctx, otp).Val()
+		if res == 0 {
+			return &otp, nil
+		}
 	}
-
-	randomString := buffer.String()
-	return &randomString, nil
 }
 
 func (sl *SignUpSessionLigic) Create() error {
