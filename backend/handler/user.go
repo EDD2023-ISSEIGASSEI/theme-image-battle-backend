@@ -4,6 +4,7 @@ import (
 	"line-bot-otp-back/logic"
 	"line-bot-otp-back/model"
 	"line-bot-otp-back/util"
+	"net/http"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	log "github.com/sirupsen/logrus"
@@ -140,8 +141,14 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 		ctx.JSON(r.StatusCode, r.Message)
 		return
 	}
-	r := util.Ok(nil)
-	ctx.JSON(r.StatusCode, gin.H{"user": ul.User})
+
+	al := logic.AuthSessionLogic{
+		Session: model.AuthSession{
+			User: *ul.User,
+		},
+	}
+	al.CreateSession()
+	ctx.JSON(http.StatusOK, al.Session)
 }
 
 type CheckOtpRequest struct {
@@ -181,8 +188,13 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 
 	f = sl.CheckOtp(req.Otp)
 	if f {
-		r := util.Ok(nil)
-		ctx.JSON(r.StatusCode, gin.H{"user": sl.Session.User})
+		al := logic.AuthSessionLogic{
+			Session: model.AuthSession{
+				User: sl.Session.User,
+			},
+		}
+		al.CreateSession()
+		ctx.JSON(http.StatusOK, al.Session)
 		sl.DeleteSession()
 	} else {
 		s := "InvalidOTP"

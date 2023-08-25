@@ -174,3 +174,20 @@ func (sl *SignInSessionLogic) DeleteSession() {
 	ctx := context.Background()
 	db.Redis.Del(ctx, sl.Session.Uuid)
 }
+
+type AuthSessionLogic struct {
+	Session model.AuthSession
+}
+
+func (al *AuthSessionLogic) CreateSession() error {
+	var ctx = context.Background()
+	al.Session.Uuid = util.GenerateUuid()
+
+	jsonData, err := json.Marshal(al.Session)
+	if err != nil {
+		log.Errorln("JsonMarshalError: ", err.Error())
+		return err
+	}
+	db.Redis.Set(ctx, al.Session.Uuid, jsonData, 0)
+	return nil
+}
