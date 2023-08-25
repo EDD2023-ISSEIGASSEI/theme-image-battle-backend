@@ -56,7 +56,7 @@ func (sl *SignUpSessionLigic) Create() error {
 // sessionが存在していたらtrue
 func (sl *SignUpSessionLigic) GetByUuid() (bool, error) {
 	ctx := context.Background()
-	lineSessionByte, err := db.Redis.Get(ctx, sl.Session.Uuid).Bytes()
+	lineSessionByte, err := db.Redis.GetDel(ctx, sl.Session.Uuid).Bytes()
 	if err != nil {
 		log.Errorln("RedisReadError: ", err.Error())
 		return false, err
@@ -76,7 +76,7 @@ func (sl *SignUpSessionLigic) GetByUuid() (bool, error) {
 // otpのsessionが存在していたらtrue
 func (sl *SignUpSessionLigic) LineRegisterByOtp(otp string) (bool, error) {
 	ctx := context.Background()
-	lineSessionByte, err := db.Redis.Get(ctx, otp).Bytes()
+	lineSessionByte, err := db.Redis.GetDel(ctx, otp).Bytes()
 	if err != nil {
 		log.Errorln("RedisReadError: ", err.Error())
 		return false, err
