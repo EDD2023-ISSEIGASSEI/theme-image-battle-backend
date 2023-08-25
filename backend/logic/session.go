@@ -131,3 +131,37 @@ func (sl *SignInSessionLogic) CreateSession() error {
 	db.Redis.Set(ctx, sl.Session.Uuid, jsonData, 5*60*time.Second)
 	return nil
 }
+
+// sessionが存在していたらtrue
+func (sl *SignInSessionLogic) GetByUuid() (bool, error) {
+	ctx := context.Background()
+	log.Debugln(sl.Session.Uuid)
+	signInSessionByte, err := db.Redis.Get(ctx, sl.Session.Uuid).Bytes()
+	if signInSessionByte == nil {
+		log.Debugln("Session not found")
+		return false, nil
+	}
+	if err != nil {
+		log.Errorln("RedisReadError: ", err.Error())
+		return false, err
+	}
+
+	var signInSession model.SignInSession
+	err = json.Unmarshal(signInSessionByte, &signInSession)
+	if err != nil {
+		log.Errorln("JsonUnmarshalError: ", err.Error())
+		return true, err
+	}
+
+	sl.Session = signInSession
+	return true, nil
+}
+
+func (sl *SignInSessionLogic) CheckOtp(otp string) bool {
+	return sl.Session.Otp == otp
+}
+
+func (sl *SignInSessionLogic) DeleteSession() {
+	ctx := context.Background()
+	db.Redis.Del(ctx, sl.Session.Uuid)
+}

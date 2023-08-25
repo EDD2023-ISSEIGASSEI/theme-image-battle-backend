@@ -137,3 +137,51 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 	r := util.Ok(nil)
 	ctx.JSON(r.StatusCode, gin.H{"user": ul.User})
 }
+
+type CheckOtpRequest struct {
+	SessionId string `json:"sessionId"`
+	Otp       string `json:"otp"`
+}
+
+func (*UserHandler) CheckOtp(ctx *gin.Context) {
+	var req CheckOtpRequest
+	err := ctx.Bind(&req)
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	sl := logic.SignInSessionLogic{
+		Session: model.SignInSession{
+			Uuid: req.SessionId,
+		},
+	}
+	f, err := sl.GetByUuid()
+	if !f && err == nil {
+		s := "InvalidSessionID"
+		r := util.BadRequest(&s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	if err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	f = sl.CheckOtp(req.Otp)
+	if f {
+		r := util.Ok(nil)
+		ctx.JSON(r.StatusCode, gin.H{"user": sl.Session.User})
+		sl.DeleteSession()
+	} else {
+		s := "InvalidOTP"
+		r := util.BadRequest(&s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+}
