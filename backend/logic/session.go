@@ -106,6 +106,6 @@ func (ll *LineSessionLogic) Create() error {
 		log.Errorln("JsonMarshalError: ", err.Error())
 		return err
 	}
-	db.Redis.Set(ctx, ll.Session.Otp, jsonData, 0)
+	db.Redis.Set(ctx, ll.Session.Otp, jsonData, 5*60*time.Second)
 	return nil
 }
