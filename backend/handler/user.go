@@ -204,12 +204,12 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 	}
 }
 
-type ValidateSessionIdRequest struct {
+type AuthSessionRequest struct {
 	SessionId string `json:"sessionId"`
 }
 
 func (*UserHandler) ValidateSessionId(ctx *gin.Context) {
-	var req CheckOtpRequest
+	var req AuthSessionRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		s := err.Error()
@@ -239,4 +239,25 @@ func (*UserHandler) ValidateSessionId(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, al.Session)
+}
+
+func (*UserHandler) SignOut(ctx *gin.Context) {
+	var req AuthSessionRequest
+	err := ctx.Bind(&req)
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	al := logic.AuthSessionLogic{
+		Session: model.AuthSession{
+			Uuid: req.SessionId,
+		},
+	}
+	al.DeleteSession()
+	r := util.Ok(nil)
+	ctx.JSON(r.StatusCode, r.Message)
 }

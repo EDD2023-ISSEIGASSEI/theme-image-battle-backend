@@ -215,3 +215,8 @@ func (al *AuthSessionLogic) GetByUuid() (bool, error) {
 	al.Session = authSession
 	return true, nil
 }
+
+func (al *AuthSessionLogic) DeleteSession() {
+	ctx := context.Background()
+	db.Redis.Del(ctx, al.Session.Uuid)
+}
