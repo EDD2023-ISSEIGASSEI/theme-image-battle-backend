@@ -203,3 +203,40 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 		return
 	}
 }
+
+type ValidateSessionIdRequest struct {
+	SessionId string `json:"sessionId"`
+}
+
+func (*UserHandler) ValidateSessionId(ctx *gin.Context) {
+	var req CheckOtpRequest
+	err := ctx.Bind(&req)
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	al := logic.AuthSessionLogic{
+		Session: model.AuthSession{
+			Uuid: req.SessionId,
+		},
+	}
+	f, err := al.GetByUuid()
+	if !f && err == nil {
+		s := "InvalidSessionID"
+		r := util.BadRequest(&s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	if err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, al.Session)
+}

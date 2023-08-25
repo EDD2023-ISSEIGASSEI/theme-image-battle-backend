@@ -20,6 +20,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	r.POST("/lineRegistration", userHandler.LineRegistration)
 	r.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
 	r.POST("/checkOtp", userHandler.CheckOtp)
+	r.POST("/varidateSessionId", userHandler.ValidateSessionId)
 
 	// lineDemoHandler := handler.LineDemoHandler{}
 	// r.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)

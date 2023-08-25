@@ -191,3 +191,27 @@ func (al *AuthSessionLogic) CreateSession() error {
 	db.Redis.Set(ctx, al.Session.Uuid, jsonData, 0)
 	return nil
 }
+
+func (al *AuthSessionLogic) GetByUuid() (bool, error) {
+	ctx := context.Background()
+	log.Debugln(al.Session.Uuid)
+	authSessionByte, err := db.Redis.Get(ctx, al.Session.Uuid).Bytes()
+	if authSessionByte == nil {
+		log.Debugln("Session not found")
+		return false, nil
+	}
+	if err != nil {
+		log.Errorln("RedisReadError: ", err.Error())
+		return false, err
+	}
+
+	var authSession model.AuthSession
+	err = json.Unmarshal(authSessionByte, &authSession)
+	if err != nil {
+		log.Errorln("JsonUnmarshalError: ", err.Error())
+		return true, err
+	}
+
+	al.Session = authSession
+	return true, nil
+}
