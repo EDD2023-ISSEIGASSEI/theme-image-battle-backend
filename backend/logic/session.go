@@ -18,10 +18,6 @@ type SignUpSessionLigic struct {
 	Session model.SignUpSession
 }
 
-type LineSessionLogic struct {
-	Session model.LineSession
-}
-
 func generateOtp() (*string, error) {
 	ctx := context.Background()
 	var buffer bytes.Buffer
@@ -71,6 +67,10 @@ func (sl *SignUpSessionLigic) GetByUuid() (bool, error) {
 
 	sl.Session = signUpSession
 	return true, nil
+}
+
+type LineSessionLogic struct {
+	Session model.LineSession
 }
 
 // otpのsessionが存在していたらtrue

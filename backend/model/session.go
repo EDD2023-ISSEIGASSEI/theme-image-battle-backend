@@ -9,3 +9,9 @@ type LineSession struct {
 	Otp     string `json:"otp"`
 	LineUid string `json:"lineUid"`
 }
+
+type SignInSession struct {
+	Uuid string `json:"uuid"`
+	Otp  string `json:"otp"`
+	User User   `json:"user"`
+}
