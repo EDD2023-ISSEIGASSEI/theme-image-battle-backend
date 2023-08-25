@@ -37,7 +37,7 @@ func generateOtp() (*string, error) {
 	}
 }
 
-func (sl *SignUpSessionLigic) Create() error {
+func (sl *SignUpSessionLigic) CreateSession() error {
 	sl.Session.Uuid = util.GenerateUuid()
 	ctx := context.Background()
 	jsonData, err := json.Marshal(sl.Session)
@@ -107,5 +107,27 @@ func (ll *LineSessionLogic) Create() error {
 		return err
 	}
 	db.Redis.Set(ctx, ll.Session.Otp, jsonData, 5*60*time.Second)
+	return nil
+}
+
+type SignInSessionLogic struct {
+	Session model.SignInSession
+}
+
+func (sl *SignInSessionLogic) CreateSession() error {
+	var ctx = context.Background()
+	sl.Session.Uuid = util.GenerateUuid()
+	otp, err := generateOtp()
+	if err != nil {
+		log.Errorln("GenerateOtpError:", err.Error())
+		return err
+	}
+	sl.Session.Otp = *otp
+	jsonData, err := json.Marshal(sl.Session)
+	if err != nil {
+		log.Errorln("JsonMarshalError: ", err.Error())
+		return err
+	}
+	db.Redis.Set(ctx, sl.Session.Uuid, jsonData, 5*60*time.Second)
 	return nil
 }

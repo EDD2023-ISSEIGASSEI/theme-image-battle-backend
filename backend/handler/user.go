@@ -37,7 +37,7 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 			User: user,
 		},
 	}
-	err = sl.Create()
+	err = sl.CreateSession()
 	if err != nil {
 		log.Errorln("[Error]exec error: ", err.Error())
 		r := util.InternalServerError(nil)
@@ -66,6 +66,15 @@ func (*UserHandler) SignIn(ctx *gin.Context) {
 		ctx.JSON(r.StatusCode, r.Message)
 		return
 	}
+
+	sl := logic.SignInSessionLogic{
+		Session: model.SignInSession{
+			User: *ul.User,
+		},
+	}
+	sl.CreateSession()
+	log.Debugln("OTP:: ", sl.Session.Otp)
+
 	r := util.Ok(nil)
 	ctx.JSON(r.StatusCode, gin.H{"user": ul.User})
 }
