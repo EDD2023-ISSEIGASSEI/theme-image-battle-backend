@@ -27,8 +27,17 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 		ctx.JSON(r.StatusCode, r.Message)
 		return
 	}
-	ul := logic.UserLigic{User: &model.User{Name: req.Name, Password: req.Password}}
-	err = ul.Create()
+
+	user := model.User{
+		Name:     req.Name,
+		Password: req.Password,
+	}
+	sl := logic.SignUpSessionLigic{
+		Session: model.SignUpSession{
+			User: user,
+		},
+	}
+	err = sl.Create()
 	if err != nil {
 		log.Errorln("[Error]exec error: ", err.Error())
 		r := util.InternalServerError(nil)
@@ -36,7 +45,7 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 		return
 	}
 	r := util.Ok(nil)
-	ctx.JSON(r.StatusCode, r.Message)
+	ctx.JSON(r.StatusCode, gin.H{"sessionId": sl.Session.Uuid})
 }
 
 func (*UserHandler) SignIn(ctx *gin.Context) {
