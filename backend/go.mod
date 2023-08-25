@@ -8,6 +8,8 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 )
 
+require github.com/line/line-bot-sdk-go/v7 v7.20.0 // indirect
+
 require (
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

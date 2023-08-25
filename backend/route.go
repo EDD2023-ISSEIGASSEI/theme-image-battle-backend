@@ -5,9 +5,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
-func DefineRoutes(r gin.IRouter) {
+func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.JSONP(http.StatusOK, gin.H{
 			"message": "ok",
@@ -22,4 +23,9 @@ func DefineRoutes(r gin.IRouter) {
 
 	lineDemoHandler := handler.LineDemoHandler{}
 	r.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
+
+	linebotHandler := handler.LinebotHandler{}
+	r.POST("/linebot", func(ctx *gin.Context) {
+		linebotHandler.EventHandler(ctx, bot)
+	})
 }
