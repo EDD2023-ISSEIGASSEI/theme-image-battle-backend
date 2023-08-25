@@ -13,6 +13,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
   server:
     container_name: line-bot-otp-server
     build:
@@ -22,6 +26,7 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     depends_on:
       - db
+      - redis
     volumes:
       - ./:/go/app
     tty: true
@@ -31,4 +36,6 @@ services:
       MYSQL_HOST: ${MYSQL_HOST} 
       MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
       SERVER_PORT: ${SERVER_PORT}
