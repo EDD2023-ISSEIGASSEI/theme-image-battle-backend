@@ -49,6 +49,46 @@ func (sl *SignUpSessionLigic) Create() error {
 	return nil
 }
 
+// sessionが存在していたらtrue
+func (sl *SignUpSessionLigic) GetByUuid() (bool, error) {
+	ctx := context.Background()
+	lineSessionByte, err := db.Redis.Get(ctx, sl.Session.Uuid).Bytes()
+	if err != nil {
+		log.Errorln("RedisReadError: ", err.Error())
+		return false, err
+	}
+
+	var signUpSession model.SignUpSession
+	err = json.Unmarshal(lineSessionByte, &signUpSession)
+	if err != nil {
+		log.Errorln("JsonUnmarshalError: ", err.Error())
+		return true, err
+	}
+
+	sl.Session = signUpSession
+	return true, nil
+}
+
+// otpのsessionが存在していたらtrue
+func (sl *SignUpSessionLigic) LineRegisterByOtp(otp string) (bool, error) {
+	ctx := context.Background()
+	lineSessionByte, err := db.Redis.Get(ctx, otp).Bytes()
+	if err != nil {
+		log.Errorln("RedisReadError: ", err.Error())
+		return false, err
+	}
+
+	var lineSession model.LineSession
+	err = json.Unmarshal(lineSessionByte, &lineSession)
+	if err != nil {
+		log.Errorln("JsonUnmarshalError: ", err.Error())
+		return true, err
+	}
+
+	sl.Session.User.LineUid = &lineSession.LineUid
+	return true, nil
+}
+
 func (ll *LineSessionLogic) Create() error {
 	var ctx = context.Background()
 	otp, err := generateOtp()

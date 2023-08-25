@@ -69,3 +69,62 @@ func (*UserHandler) SignIn(ctx *gin.Context) {
 	r := util.Ok(nil)
 	ctx.JSON(r.StatusCode, gin.H{"user": ul.User})
 }
+
+type LineRegistrationRequest struct {
+	Otp       string `json:"otp"`
+	SessionId string `json:"sessionId"`
+}
+
+func (*UserHandler) LineRegistration(ctx *gin.Context) {
+	var req LineRegistrationRequest
+	err := ctx.Bind(&req)
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	sl := logic.SignUpSessionLigic{
+		Session: model.SignUpSession{Uuid: req.SessionId},
+	}
+	f, err := sl.GetByUuid()
+	if !f && err != nil {
+		s := "InvalidSessionId"
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", err.Error())
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	if f && err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+	}
+
+	f, err = sl.LineRegisterByOtp(req.Otp)
+	if !f && err != nil {
+		s := "InvalidOTP"
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", err.Error())
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	if f && err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+	}
+
+	ul := logic.UserLigic{User: &sl.Session.User}
+	err = ul.Create()
+	if err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	r := util.Ok(nil)
+	ctx.JSON(r.StatusCode, gin.H{"user": ul.User})
+}

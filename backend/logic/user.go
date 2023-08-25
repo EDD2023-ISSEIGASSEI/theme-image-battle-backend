@@ -16,7 +16,7 @@ func (ul *UserLigic) Create() error {
 	log.Debugln("Start crate user")
 	user := ul.User
 
-	query := fmt.Sprintf("insert into users (name, password) values (?, ?)")
+	query := fmt.Sprintf("insert into users (name, password, line_uid) values (?, ?, ?)")
 	log.Debugln("--- insert query ---")
 	log.Debugln(query)
 	log.Debugln("-------------------------")
@@ -26,7 +26,7 @@ func (ul *UserLigic) Create() error {
 		return err
 	}
 
-	if _, err := stmt.Exec(user.Name, user.Password); err != nil {
+	if _, err := stmt.Exec(user.Name, user.Password, user.LineUid); err != nil {
 		log.Errorln("Exec error: ", err)
 		return err
 	}
