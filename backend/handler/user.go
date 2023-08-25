@@ -32,7 +32,7 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 		Name:     req.Name,
 		Password: req.Password,
 	}
-	sl := logic.SignUpSessionLigic{
+	sl := logic.SignUpSessionLogic{
 		Session: model.SignUpSession{
 			User: user,
 		},
@@ -95,7 +95,7 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 		return
 	}
 
-	sl := logic.SignUpSessionLigic{
+	sl := logic.SignUpSessionLogic{
 		Session: model.SignUpSession{Uuid: req.SessionId},
 	}
 	f, err := sl.GetByUuid()

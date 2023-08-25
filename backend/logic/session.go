@@ -14,7 +14,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type SignUpSessionLigic struct {
+type SignUpSessionLogic struct {
 	Session model.SignUpSession
 }
 
@@ -37,7 +37,7 @@ func generateOtp() (*string, error) {
 	}
 }
 
-func (sl *SignUpSessionLigic) CreateSession() error {
+func (sl *SignUpSessionLogic) CreateSession() error {
 	sl.Session.Uuid = util.GenerateUuid()
 	ctx := context.Background()
 	jsonData, err := json.Marshal(sl.Session)
@@ -50,7 +50,7 @@ func (sl *SignUpSessionLigic) CreateSession() error {
 }
 
 // sessionが存在していたらtrue
-func (sl *SignUpSessionLigic) GetByUuid() (bool, error) {
+func (sl *SignUpSessionLogic) GetByUuid() (bool, error) {
 	ctx := context.Background()
 	lineSessionByte, err := db.Redis.GetDel(ctx, sl.Session.Uuid).Bytes()
 	if err != nil {
@@ -74,7 +74,7 @@ type LineSessionLogic struct {
 }
 
 // otpのsessionが存在していたらtrue
-func (sl *SignUpSessionLigic) LineRegisterByOtp(otp string) (bool, error) {
+func (sl *SignUpSessionLogic) LineRegisterByOtp(otp string) (bool, error) {
 	ctx := context.Background()
 	lineSessionByte, err := db.Redis.GetDel(ctx, otp).Bytes()
 	if err != nil {
