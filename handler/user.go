@@ -5,6 +5,7 @@ import (
 	"line-bot-otp-back/model"
 	"line-bot-otp-back/util"
 	"net/http"
+	"os"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	log "github.com/sirupsen/logrus"
@@ -106,8 +107,8 @@ func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 }
 
 type LineRegistrationRequest struct {
-	Otp       string `json:"otp"`
-	SessionId string `json:"sessionId"`
+	Otp string `json:"otp"`
+	// SessionId string `json:"sessionId"`
 }
 
 func (*UserHandler) LineRegistration(ctx *gin.Context) {
@@ -121,8 +122,16 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 		return
 	}
 
+	sessionId, err := ctx.Cookie("sessionId")
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+	}
+
 	sl := logic.SignUpSessionLogic{
-		Session: model.SignUpSession{Uuid: req.SessionId},
+		Session: model.SignUpSession{Uuid: sessionId},
 	}
 	f, err := sl.GetByUuid()
 	if !f && err != nil {
@@ -169,12 +178,13 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 		},
 	}
 	al.CreateSession()
+	ctx.SetCookie("sessionId", al.Session.User.Id, 0, "/", os.Getenv("SERVER_DOMAIN"), false, true)
 	ctx.JSON(http.StatusOK, al.Session)
 }
 
 type CheckOtpRequest struct {
-	SessionId string `json:"sessionId"`
-	Otp       string `json:"otp"`
+	// SessionId string `json:"sessionId"`
+	Otp string `json:"otp"`
 }
 
 func (*UserHandler) CheckOtp(ctx *gin.Context) {
@@ -188,9 +198,17 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 		return
 	}
 
+	sessionId, err := ctx.Cookie("sessionId")
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+	}
+
 	sl := logic.SignInSessionLogic{
 		Session: model.SignInSession{
-			Uuid: req.SessionId,
+			Uuid: sessionId,
 		},
 	}
 	f, err := sl.GetByUuid()
@@ -215,6 +233,7 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 			},
 		}
 		al.CreateSession()
+		ctx.SetCookie("sessionId", al.Session.User.Id, 0, "/", os.Getenv("SERVER_DOMAIN"), false, true)
 		ctx.JSON(http.StatusOK, al.Session)
 		sl.DeleteSession()
 	} else {
@@ -226,23 +245,31 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 }
 
 type AuthSessionRequest struct {
-	SessionId string `json:"sessionId"`
+	// SessionId string `json:"sessionId"`
 }
 
 func (*UserHandler) ValidateSessionId(ctx *gin.Context) {
-	var req AuthSessionRequest
-	err := ctx.Bind(&req)
+	// var req AuthSessionRequest
+	// err := ctx.Bind(&req)
+	// if err != nil {
+	// 	s := err.Error()
+	// 	r := util.BadRequest(&s)
+	// 	log.Errorln("[Error]request parse error: ", s)
+	// 	ctx.JSON(r.StatusCode, r.Message)
+	// 	return
+	// }
+
+	sessionId, err := ctx.Cookie("sessionId")
 	if err != nil {
 		s := err.Error()
 		r := util.BadRequest(&s)
 		log.Errorln("[Error]request parse error: ", s)
 		ctx.JSON(r.StatusCode, r.Message)
-		return
 	}
 
 	al := logic.AuthSessionLogic{
 		Session: model.AuthSession{
-			Uuid: req.SessionId,
+			Uuid: sessionId,
 		},
 	}
 	f, err := al.GetByUuid()
@@ -273,9 +300,17 @@ func (*UserHandler) SignOut(ctx *gin.Context) {
 		return
 	}
 
+	sessionId, err := ctx.Cookie("sessionId")
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+	}
+
 	al := logic.AuthSessionLogic{
 		Session: model.AuthSession{
-			Uuid: req.SessionId,
+			Uuid: sessionId,
 		},
 	}
 	al.DeleteSession()
