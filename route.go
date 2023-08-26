@@ -9,6 +9,33 @@ import (
 )
 
 func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
+	// r.Use(cors.New(cors.Config{
+	// 	AllowOrigins: []string{
+	// 		"https://localhost:5173",
+	// 		// "*",
+	// 	},
+	// 	AllowMethods: []string{
+	// 		"POST",
+	// 		"PUT",
+	// 		"GET",
+	// 		"OPTIONS",
+	// 	},
+	// 	AllowHeaders: []string{
+	// 		"Access-Control-Allow-Credentials",
+	// 		"Access-Control-Allow-Headers",
+	// 		"Content-Type",
+	// 		"Content-Length",
+	// 		"Accept-Encoding",
+	// 		"Authorization",
+	// 		"Origin",
+	// 		"Cookie",
+	// 		"Set-Cookie",
+	// 	},
+	// 	AllowCredentials: true,
+	// }))
+
+	g := r.Group("api")
+
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.JSONP(http.StatusOK, gin.H{
 			"message": "ok",
@@ -16,19 +43,19 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	})
 
 	userHandler := handler.UserHandler{}
-	r.POST("/signUp", userHandler.SignUp)
-	r.POST("/lineRegistration", userHandler.LineRegistration)
-	r.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
-	r.POST("/idIsExists", userHandler.IdIsExists)
-	r.POST("/checkOtp", userHandler.CheckOtp)
-	r.POST("/varidateSessionId", userHandler.ValidateSessionId)
-	r.POST("/signOut", userHandler.SignOut)
+	g.POST("/signUp", userHandler.SignUp)
+	g.POST("/lineRegistration", userHandler.LineRegistration)
+	g.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
+	g.POST("/idIsExists", userHandler.IdIsExists)
+	g.POST("/checkOtp", userHandler.CheckOtp)
+	g.POST("/varidateSessionId", userHandler.ValidateSessionId)
+	g.POST("/signOut", userHandler.SignOut)
 
 	// lineDemoHandler := handler.LineDemoHandler{}
-	// r.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
+	// g.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
 
 	linebotHandler := handler.LinebotHandler{}
-	r.POST("/linebot", func(ctx *gin.Context) {
+	g.POST("/linebot", func(ctx *gin.Context) {
 		linebotHandler.EventHandler(ctx, bot)
 	})
 }
