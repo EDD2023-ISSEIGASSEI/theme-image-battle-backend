@@ -61,7 +61,7 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 	}
 	http.SetCookie(ctx.Writer, &cookie)
 	r := util.Ok(nil)
-	ctx.JSON(r.StatusCode, gin.H{"sessionId": sl.Session.Uuid})
+	ctx.JSON(r.StatusCode, r.Message)
 }
 
 type SignInRequest struct {
@@ -127,7 +127,7 @@ func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 	}
 
 	r := util.Ok(nil)
-	ctx.JSON(r.StatusCode, gin.H{"sessionId": sl.Session.Uuid})
+	ctx.JSON(r.StatusCode, r.Message)
 }
 
 type LineRegistrationRequest struct {
@@ -215,7 +215,7 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 	}
 	http.SetCookie(ctx.Writer, &cookie)
 
-	ctx.JSON(http.StatusOK, al.Session)
+	ctx.JSON(http.StatusOK, al.Session.User)
 }
 
 type CheckOtpRequest struct {
@@ -282,7 +282,7 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 		}
 		http.SetCookie(ctx.Writer, &cookie)
 
-		ctx.JSON(http.StatusOK, al.Session)
+		ctx.JSON(http.StatusOK, al.Session.User)
 		sl.DeleteSession()
 	} else {
 		s := "InvalidOTP"
