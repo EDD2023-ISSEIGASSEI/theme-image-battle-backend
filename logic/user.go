@@ -38,7 +38,7 @@ func (ul *UserLigic) Create() error {
 func (ul *UserLigic) SelectById() (bool, error) {
 	log.Debugln("Start select user")
 
-	query := fmt.Sprintf("selec COUNT(*), id, name, password, line_uid from users where id = ?")
+	query := fmt.Sprintf("select id, name, password, line_uid from users where id = ?")
 	log.Debugln("--- select user query ---")
 	log.Debugln(query)
 	log.Debugln("-------------------------")
@@ -50,12 +50,8 @@ func (ul *UserLigic) SelectById() (bool, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var count int
 		var lineUid *string
-		err = rows.Scan(&count, &ul.User.Id, &ul.User.Name, &ul.User.Password, &lineUid)
-		if count == 0 {
-			return false, nil
-		}
+		err = rows.Scan(&ul.User.Id, &ul.User.Name, &ul.User.Password, &lineUid)
 		if err != nil {
 			log.Errorln("Exec error: ", err)
 			return false, err
@@ -68,4 +64,33 @@ func (ul *UserLigic) SelectById() (bool, error) {
 
 func (ul *UserLigic) VaridatePassword(password string) bool {
 	return ul.User.Password == password
+}
+
+func (ul *UserLigic) IdIsExists() (bool, error) {
+	query := fmt.Sprintf("select id from users where id = ?")
+	log.Debugln("--- select user query ---")
+	log.Debugln(query)
+	log.Debugln("-------------------------")
+
+	rows, err := db.Db.Query(query, ul.User.Id)
+	if err != nil {
+		log.Errorln("Exec error: ", err)
+		return false, err
+	}
+	defer rows.Close()
+	count := 0
+	var id string
+	for rows.Next() {
+		err = rows.Scan(&id)
+		if err != nil {
+			log.Errorln("Exec error: ", err)
+			return false, err
+		}
+		count++
+	}
+	if count == 0 {
+		return false, nil
+	} else {
+		return true, nil
+	}
 }

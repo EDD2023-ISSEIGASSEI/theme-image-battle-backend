@@ -282,3 +282,33 @@ func (*UserHandler) SignOut(ctx *gin.Context) {
 	r := util.Ok(nil)
 	ctx.JSON(r.StatusCode, r.Message)
 }
+
+type IdIsExistsRequest struct {
+	Id string `json:"id"`
+}
+
+func (*UserHandler) IdIsExists(ctx *gin.Context) {
+	var req IdIsExistsRequest
+	err := ctx.Bind(&req)
+	if err != nil {
+		s := err.Error()
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	ul := logic.UserLigic{
+		User: &model.User{
+			Id: req.Id,
+		},
+	}
+	f, err := ul.IdIsExists()
+	if err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"isExists": f})
+}
