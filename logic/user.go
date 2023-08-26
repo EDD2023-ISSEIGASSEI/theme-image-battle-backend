@@ -43,7 +43,7 @@ func (ul *UserLigic) SelectById() (bool, error) {
 	log.Debugln(query)
 	log.Debugln("-------------------------")
 
-	rows, err := db.Db.Query(query, ul.User.Name, ul.User.Password)
+	rows, err := db.Db.Query(query, ul.User.Id)
 	if err != nil {
 		log.Errorln("Exec error: ", err)
 		return false, err

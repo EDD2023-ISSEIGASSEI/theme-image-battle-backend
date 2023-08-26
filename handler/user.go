@@ -14,13 +14,14 @@ import (
 
 type UserHandler struct{}
 
-type UserRequest struct {
+type SignUpRequest struct {
+	Id       string `json:"id"`
 	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 
 func (*UserHandler) SignUp(ctx *gin.Context) {
-	var req UserRequest
+	var req SignUpRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		s := err.Error()
@@ -31,6 +32,7 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 	}
 
 	user := model.User{
+		Id:       req.Id,
 		Name:     req.Name,
 		Password: req.Password,
 	}
@@ -50,8 +52,13 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 	ctx.JSON(r.StatusCode, gin.H{"sessionId": sl.Session.Uuid})
 }
 
+type SignInRequest struct {
+	Id       string `json:"id"`
+	Password string `json:"password"`
+}
+
 func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
-	var req UserRequest
+	var req SignInRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		s := err.Error()
@@ -60,7 +67,7 @@ func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 		ctx.JSON(r.StatusCode, r.Message)
 		return
 	}
-	ul := logic.UserLigic{User: &model.User{Name: req.Name, Password: req.Password}}
+	ul := logic.UserLigic{User: &model.User{Id: req.Id, Password: req.Password}}
 	f, err := ul.SelectById()
 	if !f && err == nil {
 		s := "InvalidId"
