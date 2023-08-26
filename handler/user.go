@@ -80,7 +80,23 @@ func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 		return
 	}
 	ul := logic.UserLigic{User: &model.User{Id: req.Id, Password: req.Password}}
-	f, err := ul.SelectById()
+
+	f, err := ul.IdIsExists()
+	if err != nil {
+		log.Errorln("[Error]exec error: ", err.Error())
+		r := util.InternalServerError(nil)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+	if !f {
+		s := "InvalidId"
+		r := util.BadRequest(&s)
+		log.Errorln("[Error]request parse error: ", s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
+	f, err = ul.SelectById()
 	if !f && err == nil {
 		s := "InvalidId"
 		r := util.BadRequest(&s)
@@ -272,7 +288,7 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 
 		cookie := http.Cookie{
 			Name:     "sessionId",
-			Value:    sl.Session.Uuid,
+			Value:    al.Session.Uuid,
 			MaxAge:   0,
 			Path:     "/",
 			Domain:   "",
