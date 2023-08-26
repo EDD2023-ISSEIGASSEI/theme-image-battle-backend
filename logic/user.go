@@ -16,7 +16,7 @@ func (ul *UserLigic) Create() error {
 	log.Debugln("Start crate user")
 	user := ul.User
 
-	query := fmt.Sprintf("insert into users (name, password, line_uid) values (?, ?, ?)")
+	query := fmt.Sprintf("insert into users (id, name, password, line_uid) values (?, ?, ?, ?)")
 	log.Debugln("--- insert query ---")
 	log.Debugln(query)
 	log.Debugln("-------------------------")
@@ -26,17 +26,11 @@ func (ul *UserLigic) Create() error {
 		return err
 	}
 
-	result, err := stmt.Exec(user.Name, user.Password, user.LineUid)
+	_, err = stmt.Exec(user.Id, user.Name, user.Password, user.LineUid)
 	if err != nil {
 		log.Errorln("Exec error: ", err)
 		return err
 	}
-	insertedId, err := result.LastInsertId()
-	if err != nil {
-		log.Error(err.Error())
-		return err
-	}
-	ul.User.Id = &insertedId
 
 	return nil
 }
@@ -56,14 +50,12 @@ func (ul *UserLigic) SelectByNameAndPass() error {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var id int64
 		var lineUid *string
-		err = rows.Scan(&id, &ul.User.Name, &ul.User.Password, &lineUid)
+		err = rows.Scan(&ul.User.Id, &ul.User.Name, &ul.User.Password, &lineUid)
 		if err != nil {
 			log.Errorln("Exec error: ", err)
 			return err
 		}
-		ul.User.Id = &id
 		ul.User.LineUid = lineUid
 	}
 
