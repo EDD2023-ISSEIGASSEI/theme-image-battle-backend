@@ -35,10 +35,10 @@ func (ul *UserLigic) Create() error {
 	return nil
 }
 
-func (ul *UserLigic) SelectByNameAndPass() error {
+func (ul *UserLigic) SelectById() (bool, error) {
 	log.Debugln("Start select user")
 
-	query := fmt.Sprintf("select id, name, password, line_uid from users where name = ? and password = ?")
+	query := fmt.Sprintf("selec COUNT(*), id, name, password, line_uid from users where id = ?")
 	log.Debugln("--- select user query ---")
 	log.Debugln(query)
 	log.Debugln("-------------------------")
@@ -46,18 +46,22 @@ func (ul *UserLigic) SelectByNameAndPass() error {
 	rows, err := db.Db.Query(query, ul.User.Name, ul.User.Password)
 	if err != nil {
 		log.Errorln("Exec error: ", err)
-		return err
+		return false, err
 	}
 	defer rows.Close()
 	for rows.Next() {
+		var count int
 		var lineUid *string
-		err = rows.Scan(&ul.User.Id, &ul.User.Name, &ul.User.Password, &lineUid)
+		err = rows.Scan(&count, &ul.User.Id, &ul.User.Name, &ul.User.Password, &lineUid)
+		if count == 0 {
+			return false, nil
+		}
 		if err != nil {
 			log.Errorln("Exec error: ", err)
-			return err
+			return false, err
 		}
 		ul.User.LineUid = lineUid
 	}
 
-	return nil
+	return true, nil
 }

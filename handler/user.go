@@ -61,7 +61,13 @@ func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 		return
 	}
 	ul := logic.UserLigic{User: &model.User{Name: req.Name, Password: req.Password}}
-	err = ul.SelectByNameAndPass()
+	f, err := ul.SelectById()
+	if !f && err == nil {
+		s := "InvalidId"
+		r := util.BadRequest(&s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
 	if err != nil {
 		log.Errorln("[Error]exec error: ", err.Error())
 		r := util.InternalServerError(nil)
@@ -129,6 +135,7 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 		log.Errorln("[Error]exec error: ", err.Error())
 		r := util.InternalServerError(nil)
 		ctx.JSON(r.StatusCode, r.Message)
+		return
 	}
 
 	sl.DeleteSession()
