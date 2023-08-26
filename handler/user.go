@@ -5,7 +5,6 @@ import (
 	"line-bot-otp-back/model"
 	"line-bot-otp-back/util"
 	"net/http"
-	"os"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	log "github.com/sirupsen/logrus"
@@ -49,6 +48,18 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 		ctx.JSON(r.StatusCode, r.Message)
 		return
 	}
+
+	cookie := http.Cookie{
+		Name:     "sessionId",
+		Value:    sl.Session.Uuid,
+		MaxAge:   0,
+		Path:     "/",
+		Domain:   "",
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	}
+	http.SetCookie(ctx.Writer, &cookie)
 	r := util.Ok(nil)
 	ctx.JSON(r.StatusCode, gin.H{"sessionId": sl.Session.Uuid})
 }
@@ -96,6 +107,19 @@ func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 		},
 	}
 	sl.CreateSession()
+
+	cookie := http.Cookie{
+		Name:     "sessionId",
+		Value:    sl.Session.Uuid,
+		MaxAge:   0,
+		Path:     "/",
+		Domain:   "",
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	}
+	http.SetCookie(ctx.Writer, &cookie)
+
 	message := linebot.NewTextMessage("↓ワンタイムパスワード↓\n" + sl.Session.Otp)
 	_, err = bot.PushMessage(*sl.Session.User.LineUid, message).Do()
 	if err != nil {
@@ -178,7 +202,19 @@ func (*UserHandler) LineRegistration(ctx *gin.Context) {
 		},
 	}
 	al.CreateSession()
-	ctx.SetCookie("sessionId", al.Session.User.Id, 0, "/", os.Getenv("SERVER_DOMAIN"), false, true)
+
+	cookie := http.Cookie{
+		Name:     "sessionId",
+		Value:    al.Session.Uuid,
+		MaxAge:   0,
+		Path:     "/",
+		Domain:   "",
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	}
+	http.SetCookie(ctx.Writer, &cookie)
+
 	ctx.JSON(http.StatusOK, al.Session)
 }
 
@@ -233,7 +269,19 @@ func (*UserHandler) CheckOtp(ctx *gin.Context) {
 			},
 		}
 		al.CreateSession()
-		ctx.SetCookie("sessionId", al.Session.User.Id, 0, "/", os.Getenv("SERVER_DOMAIN"), false, true)
+
+		cookie := http.Cookie{
+			Name:     "sessionId",
+			Value:    sl.Session.Uuid,
+			MaxAge:   0,
+			Path:     "/",
+			Domain:   "",
+			HttpOnly: true,
+			SameSite: http.SameSiteNoneMode,
+			Secure:   true,
+		}
+		http.SetCookie(ctx.Writer, &cookie)
+
 		ctx.JSON(http.StatusOK, al.Session)
 		sl.DeleteSession()
 	} else {
