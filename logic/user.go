@@ -65,3 +65,7 @@ func (ul *UserLigic) SelectById() (bool, error) {
 
 	return true, nil
 }
+
+func (ul *UserLigic) VaridatePassword(password string) bool {
+	return ul.User.Password == password
+}

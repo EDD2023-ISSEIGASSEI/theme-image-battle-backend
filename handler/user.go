@@ -82,6 +82,13 @@ func (*UserHandler) SignIn(ctx *gin.Context, bot *linebot.Client) {
 		return
 	}
 
+	if !ul.VaridatePassword(req.Password) {
+		s := "InvalidPassword"
+		r := util.BadRequest(&s)
+		ctx.JSON(r.StatusCode, r.Message)
+		return
+	}
+
 	sl := logic.SignInSessionLogic{
 		Session: model.SignInSession{
 			User: *ul.User,
