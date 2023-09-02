@@ -36,7 +36,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 
 	g := r.Group("api")
 
-	r.GET("/", func(ctx *gin.Context) {
+	g.GET("/", func(ctx *gin.Context) {
 		ctx.JSONP(http.StatusOK, gin.H{
 			"message": "ok",
 		})
