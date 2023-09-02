@@ -32,22 +32,6 @@ func (ul *UserLigic) Create() error {
 		return err
 	}
 
-	query = fmt.Sprintf("insert into scores (user_id) values (?)")
-	log.Debugln("--- insert query ---")
-	log.Debugln(query)
-	log.Debugln("-------------------------")
-	stmt, err = db.Db.Prepare(query)
-	if err != nil {
-		log.Errorln("Prepare error: ", err)
-		return err
-	}
-
-	_, err = stmt.Exec(user.Id)
-	if err != nil {
-		log.Errorln("Exec error: ", err)
-		return err
-	}
-
 	return nil
 }
 
