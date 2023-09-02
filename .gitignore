@@ -3,5 +3,5 @@ tmp
 docker/db/data
 
 **/*.pem
-nginx/log/*
-!nginx/log/.gitkeep
+docker/nginx/log/*
+!docker/nginx/log/.gitkeep
