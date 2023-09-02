@@ -3,5 +3,6 @@ tmp
 docker/db/data
 
 **/*.pem
+docker/nginx/config/default.conf
 docker/nginx/log/*
 !docker/nginx/log/.gitkeep

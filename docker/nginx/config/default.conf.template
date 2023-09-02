@@ -1,10 +1,10 @@
 # nginx.conf
 server {
     listen 443 ssl;
-    server_name shun.dev.host;
+    server_name ${NGINX_SERVER_NAME};
 
-    ssl_certificate /etc/nginx/conf.d/ssl/shun.dev.host.pem;
-    ssl_certificate_key /etc/nginx/conf.d/ssl/shun.dev.host-key.pem;
+    ssl_certificate /etc/nginx/conf.d/ssl/${SSL_CERTIFICATE_FILE_NAME};
+    ssl_certificate_key /etc/nginx/conf.d/ssl/${SSL_CERTIFICATE_KEY_FILE_NAME};
 
     location / {
         proxy_pass http://host.docker.internal:3000;
