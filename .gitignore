@@ -1,3 +1,7 @@
 **/.env
 tmp
 docker/db/data
+
+**/*.pem
+nginx/log/*
+!nginx/log/.gitkeep
