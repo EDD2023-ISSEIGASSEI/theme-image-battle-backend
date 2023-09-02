@@ -1,5 +1,26 @@
 # linebot-otp
 
+## Start Up
+1. mkcertをインストール
+2. `/etc/hosts/`に証明書を発行する用のローカルドメインを用意  
+例) 127.0.0.1 shun.dev.host
+3. mkcertを使って証明書発行
+4. 証明書とキーを`docker/nginx/config/ssl/`に移動
+5. .env.exampleをコピーして、名前を.envに変更
+6. 値を入力
+7. `docker compose up -d`で起動
+8. `https://<NGINX_SERVER_NAME>/api`にアクセスして、200が帰ってくることを確認
+9. `docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path migrations up`で初回マイグレーション
+
+
+## migration
+```
+docker compose exec server migrate create -ext sql -dir migrations -seq create_users
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations up
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations down
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations force 1
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations version
+```
 
 
 ## SignUpの流れ
