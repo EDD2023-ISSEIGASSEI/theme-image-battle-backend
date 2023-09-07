@@ -15,9 +15,10 @@ import (
 type UserHandler struct{}
 
 type SignUpRequest struct {
-	Id       string `json:"id"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	Id           string `json:"id"`
+	Name         string `json:"name"`
+	Password     string `json:"password"`
+	IconImageUrl string `json:"iconImageUrl"`
 }
 
 func (*UserHandler) SignUp(ctx *gin.Context) {
@@ -32,9 +33,10 @@ func (*UserHandler) SignUp(ctx *gin.Context) {
 	}
 
 	user := model.User{
-		Id:       req.Id,
-		Name:     req.Name,
-		Password: req.Password,
+		Id:           req.Id,
+		Name:         req.Name,
+		Password:     req.Password,
+		IconImageUrl: req.IconImageUrl,
 	}
 	sl := logic.SignUpSessionLogic{
 		Session: model.SignUpSession{
