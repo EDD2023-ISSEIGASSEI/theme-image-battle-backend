@@ -1,4 +1,4 @@
-# linebot-otp
+# theme-image-battle-backend
 
 ## Start Up
 1. mkcertをインストール
@@ -16,10 +16,10 @@
 ## migration
 ```
 docker compose exec server migrate create -ext sql -dir migrations -seq create_users
-docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations up
-docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations down
-docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations force 1
-docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path db/migrations version
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path migrations up
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path migrations down
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path migrations force 1
+docker compose exec server migrate -database 'mysql://root:password@tcp(db:3306)/line_bot_otp' -path migrations version
 ```
 
 

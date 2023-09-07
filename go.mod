@@ -1,4 +1,4 @@
-module line-bot-otp-back
+module edd2023-back
 
 go 1.20
 

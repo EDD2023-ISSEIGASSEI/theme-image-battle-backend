@@ -1,8 +1,8 @@
 package main
 
 import (
+	"edd2023-back/db"
 	"fmt"
-	"line-bot-otp-back/db"
 	"os"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"

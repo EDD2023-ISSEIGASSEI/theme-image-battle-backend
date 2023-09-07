@@ -1,7 +1,7 @@
 package main
 
 import (
-	"line-bot-otp-back/handler"
+	"edd2023-back/handler"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

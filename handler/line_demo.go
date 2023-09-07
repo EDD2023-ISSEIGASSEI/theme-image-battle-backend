@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"line-bot-otp-back/logic"
-	"line-bot-otp-back/model"
-	"line-bot-otp-back/util"
+	"edd2023-back/logic"
+	"edd2023-back/model"
+	"edd2023-back/util"
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"

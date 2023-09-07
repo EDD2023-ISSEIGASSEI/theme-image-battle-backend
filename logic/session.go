@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
+	"edd2023-back/db"
+	"edd2023-back/model"
+	"edd2023-back/util"
 	"encoding/json"
-	"line-bot-otp-back/db"
-	"line-bot-otp-back/model"
-	"line-bot-otp-back/util"
 	"math/big"
 	"time"
 

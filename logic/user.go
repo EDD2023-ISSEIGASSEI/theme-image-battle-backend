@@ -1,9 +1,9 @@
 package logic
 
 import (
+	"edd2023-back/db"
+	"edd2023-back/model"
 	"fmt"
-	"line-bot-otp-back/db"
-	"line-bot-otp-back/model"
 
 	log "github.com/sirupsen/logrus"
 )

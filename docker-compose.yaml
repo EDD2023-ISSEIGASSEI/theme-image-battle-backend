@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   db:
-    container_name: line-bot-otp-db
+    container_name: edd2023-db
     build:
       context: ./
       dockerfile: ./docker/db/Dockerfile
@@ -15,10 +15,11 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
   redis:
     image: redis:7.0-alpine
+    container_name: edd2023-redis
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
   server:
-    container_name: line-bot-otp-server
+    container_name: edd2023-server
     build:
       context: ./
       dockerfile: ./docker/server/Dockerfile
@@ -43,7 +44,7 @@ services:
       LINEBOT_CHANNEL_TOKEN: ${LINEBOT_CHANNEL_TOKEN}
   nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: edd2023-nginx
     ports:
       - 443:443
     volumes:

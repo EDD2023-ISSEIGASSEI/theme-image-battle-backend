@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"line-bot-otp-back/logic"
-	"line-bot-otp-back/model"
-	"line-bot-otp-back/util"
+	"edd2023-back/logic"
+	"edd2023-back/model"
+	"edd2023-back/util"
 	"net/http"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
