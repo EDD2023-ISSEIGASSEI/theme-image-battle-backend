@@ -81,15 +81,16 @@ type LineSessionLogic struct {
 // otpのsessionが存在していたらtrue
 func (sl *SignUpSessionLogic) LineRegisterByOtp(otp string) (bool, error) {
 	ctx := context.Background()
-	lineSessionByte, err := db.Redis.GetDel(ctx, otp).Bytes()
-	if lineSessionByte == nil {
-		log.Debug("Cannot find otp")
-		return false, nil
-	}
+	lineSessionByte, err := db.Redis.Get(ctx, otp).Bytes()
 	if err != nil {
 		log.Errorln("RedisReadError: ", err.Error())
 		return false, err
 	}
+	if lineSessionByte == nil {
+		log.Debug("Cannot find otp")
+		return false, nil
+	}
+	db.Redis.Del(ctx, otp)
 
 	var lineSession model.LineSession
 	err = json.Unmarshal(lineSessionByte, &lineSession)
@@ -146,13 +147,13 @@ func (sl *SignInSessionLogic) GetByUuid() (bool, error) {
 	ctx := context.Background()
 	log.Debugln(sl.Session.Uuid)
 	signInSessionByte, err := db.Redis.Get(ctx, sl.Session.Uuid).Bytes()
-	if signInSessionByte == nil {
-		log.Debugln("Session not found")
-		return false, nil
-	}
 	if err != nil {
 		log.Errorln("RedisReadError: ", err.Error())
 		return false, err
+	}
+	if signInSessionByte == nil {
+		log.Debugln("Session not found")
+		return false, nil
 	}
 
 	var signInSession model.SignInSession
@@ -196,13 +197,13 @@ func (al *AuthSessionLogic) GetByUuid() (bool, error) {
 	ctx := context.Background()
 	log.Debugln(al.Session.Uuid)
 	authSessionByte, err := db.Redis.Get(ctx, al.Session.Uuid).Bytes()
-	if authSessionByte == nil {
-		log.Debugln("Session not found")
-		return false, nil
-	}
 	if err != nil {
 		log.Errorln("RedisReadError: ", err.Error())
 		return false, err
+	}
+	if authSessionByte == nil {
+		log.Debugln("Session not found")
+		return false, nil
 	}
 
 	var authSession model.AuthSession
