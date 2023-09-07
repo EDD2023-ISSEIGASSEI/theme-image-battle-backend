@@ -6,3 +6,5 @@ docker/db/data
 docker/nginx/config/default.conf
 docker/nginx/log/*
 !docker/nginx/log/.gitkeep
+
+ztmp*
