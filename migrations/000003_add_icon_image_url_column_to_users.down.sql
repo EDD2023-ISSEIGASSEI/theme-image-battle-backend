@@ -1,0 +1,1 @@
+ALTER TABLE Users DROP COLUMN icon_image_url;
