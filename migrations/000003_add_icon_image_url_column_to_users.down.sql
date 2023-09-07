@@ -1,1 +1,1 @@
-ALTER TABLE Users DROP COLUMN icon_image_url;
+ALTER TABLE users DROP COLUMN icon_image_url;
