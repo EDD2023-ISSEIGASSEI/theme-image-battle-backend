@@ -32,6 +32,7 @@ services:
       - ./:/go/app
     tty: true
     environment:
+      ENV: ${ENV}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_HOST: ${MYSQL_HOST} 

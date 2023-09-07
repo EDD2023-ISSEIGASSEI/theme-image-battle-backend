@@ -1,4 +1,5 @@
 **/.env
+**/.env.prod
 tmp
 docker/db/data
 

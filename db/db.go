@@ -19,6 +19,9 @@ func Init() {
 	db_port := os.Getenv("MYSQL_PORT")
 	db_database := os.Getenv("MYSQL_DATABASE")
 	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true", db_user, db_password, db_host, db_port, db_database)
+	if os.Getenv("ENV") == "prod" {
+		dataSourceName += "&tls=true&interpolateParams=true"
+	}
 
 	var err error
 	Db, err = sql.Open("mysql", dataSourceName)
