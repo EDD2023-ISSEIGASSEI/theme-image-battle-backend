@@ -198,6 +198,18 @@ func (*RoomHandler) JoinRoom(ctx *gin.Context) {
 		return
 	}
 
-	// broadcast WaitiongPhase
+	// ToDo: broadcast WaitiongPhase
+
+	cookie := http.Cookie{
+		Name:     "gameSessionId",
+		Value:    gsl.Session.Uuid,
+		MaxAge:   0,
+		Path:     "/",
+		Domain:   "",
+		HttpOnly: true,
+		SameSite: http.SameSiteNoneMode,
+		Secure:   true,
+	}
+	http.SetCookie(ctx.Writer, &cookie)
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }
