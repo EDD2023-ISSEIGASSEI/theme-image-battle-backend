@@ -24,29 +24,10 @@ func (*RoomHandler) CreateRoom(ctx *gin.Context) {
 	}
 
 	sessionId, err := ctx.Cookie("sessionId")
-	if err != nil {
-		s := err.Error()
-		r := util.BadRequest(&s)
-		log.Errorln("[Error]request parse error: ", s)
-		ctx.JSON(r.StatusCode, r.Message)
-	}
-
 	asl := logic.AuthSessionLogic{
 		Session: model.AuthSession{Uuid: sessionId},
 	}
-	f, err := asl.GetByUuid()
-	if !f && err != nil {
-		s := "InvalidSessionId"
-		r := util.BadRequest(&s)
-		log.Errorln("[Error]request parse error: ", err.Error())
-		ctx.JSON(r.StatusCode, r.Message)
-		return
-	}
-	if f && err != nil {
-		log.Errorln("[Error]exec error: ", err.Error())
-		r := util.InternalServerError(nil)
-		ctx.JSON(r.StatusCode, r.Message)
-	}
+	asl.GetByUuid()
 
 	rl := logic.RoomLogic{}
 	err = rl.CreateRoom(req, asl.Session.User.Id)
@@ -88,3 +69,10 @@ func (*RoomHandler) CreateRoom(ctx *gin.Context) {
 	http.SetCookie(ctx.Writer, &cookie)
 	ctx.JSON(http.StatusOK, rl.Room)
 }
+
+// func (*RoomHandler) ReadAllRooms(ctx *gin.Context) {
+// 	keys, err := client.Keys(context.Background(), "*").Result()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// }

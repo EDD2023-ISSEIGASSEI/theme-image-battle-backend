@@ -2,6 +2,7 @@ package main
 
 import (
 	"edd2023-back/handler"
+	"edd2023-back/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -61,6 +62,9 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 		linebotHandler.EventHandler(ctx, bot)
 	})
 
+	app := g.Group("")
+	app.Use(middleware.AuthSessionCheck())
+
 	roomHandler := handler.RoomHandler{}
-	g.POST("/room", roomHandler.CreateRoom)
+	app.POST("/room", roomHandler.CreateRoom)
 }
