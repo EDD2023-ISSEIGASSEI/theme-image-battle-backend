@@ -58,8 +58,18 @@ func (*GameHandler) GameStart(ctx *gin.Context) {
 		return
 	}
 
+	ps := []model.PlayerState{}
+	for _, p := range gsl.Session.Players {
+		ps = append(ps, model.PlayerState{
+			Player:      p,
+			Score:       0,
+			IsCompleted: false,
+		})
+	}
+	gsl.Session.PlayerStates = ps
 	gsl.Session.RoundNum = req.Round
 	gsl.Session.Phase = model.GeneratePhase
+
 	err = gsl.UpdateByUuId()
 	if err != nil {
 		log.Errorln("[Error]exec error: ", err.Error())
