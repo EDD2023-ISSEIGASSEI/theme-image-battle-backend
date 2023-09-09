@@ -76,9 +76,11 @@ func (*PromptHandler) SubmitPrompt(ctx *gin.Context) {
 	}
 
 	if f {
-		gsl.Session.Phase = model.ShowScorePhase
+		gsl.Session.Phase = model.GuessPhase
 		gsl.Session.DealerPlayerId = gsl.Session.Players[0].Id
-		gsl.Session.ShowingPlayerId = gsl.Session.Players[1].Id
+		for idx := range gsl.Session.PlayerStates {
+			gsl.Session.PlayerStates[idx].IsCompleted = false
+		}
 	}
 
 	gsl.UpdateByUuId()
