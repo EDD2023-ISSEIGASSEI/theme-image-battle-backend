@@ -3,7 +3,6 @@ info:
   version: '1.0'
   title: EDD2023
 servers:
-  - url: 'http://localhost:3000/api'
   - url: 'https://shun.dev.host/api'
     description: ''
 paths:
@@ -17,7 +16,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /auth/lineRegistration:
@@ -32,7 +30,6 @@ paths:
         '200':
           $ref: '#/components/responses/User'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /auth/idIsExists:
@@ -45,7 +42,6 @@ paths:
         '200':
           $ref: '#/components/responses/IdIsExists'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /auth/signIn:
@@ -58,7 +54,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /auth/checkOtp:
@@ -73,7 +68,6 @@ paths:
         '200':
           $ref: '#/components/responses/User'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /auth/signOut:
@@ -88,7 +82,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /user:
@@ -101,7 +94,6 @@ paths:
         '200':
           $ref: '#/components/responses/User'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /room:
@@ -120,7 +112,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Room'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /room/list:
@@ -142,7 +133,6 @@ paths:
                     items:
                       $ref: '#/components/schemas/Room'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /room/join:
@@ -157,7 +147,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/gamePhase:
@@ -178,7 +167,6 @@ paths:
                   phase:
                     $ref: '#/components/schemas/Phase'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/phaseState:
@@ -215,7 +203,6 @@ paths:
                       - $ref: '#/components/schemas/ShowCorrectAnswerPhaseState'
                       - $ref: '#/components/schemas/EndingPhaseState'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/start:
@@ -229,7 +216,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/topic:
@@ -250,7 +236,6 @@ paths:
                   topic:
                     $ref: '#/components/schemas/Topic'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/prompt:
@@ -279,7 +264,6 @@ paths:
                   generatedImageUrl:
                     type: string
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/answer:
@@ -310,7 +294,6 @@ paths:
                   topic:
                     $ref: '#/components/schemas/Topic'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/showScore/next:
@@ -324,7 +307,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/showScore/prev:
@@ -338,7 +320,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/showScore/end:
@@ -352,7 +333,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/showCorrectAnswer/next:
@@ -366,7 +346,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/nextRound:
@@ -380,7 +359,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/ending:
@@ -394,7 +372,6 @@ paths:
         '200':
           description: OK
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
   /game/waiting:
@@ -408,7 +385,6 @@ paths:
         '200':
           $ref: '#/components/responses/Message'
       servers:
-        - url: 'http://localhost:3000/api'
         - url: 'https://shun.dev.host/api'
           description: ''
 components:
@@ -488,6 +464,12 @@ components:
                 type: string
               maxMember:
                 type: number
+          examples:
+            Example 1:
+              value:
+                name: string
+                password: string
+                maxMember: 2
     JoinRoomRequest:
       content:
         application/json:
