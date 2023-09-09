@@ -88,4 +88,5 @@ func (gl *GameSessionLogic) IsExistsPlayer(player model.Player) bool {
 func (gl *GameSessionLogic) JoinPlayer(player model.Player) {
 	// ToDo: wsConn追加
 	gl.Session.Players = append(gl.Session.Players, player)
+	gl.Session.Room.PlayerNum += 1
 }
