@@ -65,6 +65,8 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	app := g.Group("")
 	app.Use(middleware.AuthSessionCheck())
 
+	app.GET("/user", userHandler.ValidateSessionId)
+
 	roomHandler := handler.RoomHandler{}
 	app.POST("/room", roomHandler.CreateRoom)
 	app.GET("/room/list", roomHandler.ReadAllRooms)
