@@ -58,3 +58,12 @@ services:
       SSL_CERTIFICATE_KEY_FILE_NAME: ${SSL_CERTIFICATE_KEY_FILE_NAME}
     command: /bin/bash -c "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx-debug -g 'daemon off;'"
     # command: echo $NGINX_SERVER_NAME $SSL_CERTIFICATE_FILE_NAME
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: "edd2023-swagger"
+    ports:
+      - "8002:8080"
+    volumes:
+      - ./docs/swagger.yaml:/openapi.yaml
+    environment:
+      SWAGGER_JSON: /openapi.yaml
