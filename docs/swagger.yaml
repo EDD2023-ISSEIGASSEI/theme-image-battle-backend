@@ -485,7 +485,7 @@ components:
               password:
                 type: string
               maxMember:
-                type: string
+                type: number
     JoinRoomRequest:
       content:
         application/json:
@@ -537,6 +537,8 @@ components:
         playerNum:
           type: string
         maxPlayerNum:
+          type: string
+        ownerPlayerId:
           type: string
     Phase:
       type: string
