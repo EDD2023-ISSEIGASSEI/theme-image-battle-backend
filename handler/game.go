@@ -59,16 +59,24 @@ func (*GameHandler) GameStart(ctx *gin.Context) {
 	}
 
 	ps := []model.PlayerState{}
-	for _, p := range gsl.Session.Players {
-		ps = append(ps, model.PlayerState{
-			Player:      p,
-			Score:       0,
-			IsCompleted: false,
-		})
+	if len(gsl.Session.PlayerStates) == 0 {
+		for _, p := range gsl.Session.Players {
+			ps = append(ps, model.PlayerState{
+				Player:      p,
+				Score:       0,
+				IsCompleted: false,
+			})
+		}
+	} else {
+		for idx := range gsl.Session.PlayerStates {
+			gsl.Session.PlayerStates[idx].IsCompleted = false
+		}
 	}
+	gsl.Session.Phase = model.GeneratePhase
 	gsl.Session.PlayerStates = ps
 	gsl.Session.RoundNum = req.Round
-	gsl.Session.Phase = model.GeneratePhase
+	gsl.Session.GeneratedQuestions = []model.GeneratedQuestion{}
+	gsl.Session.PlayerTopics = []model.PlayerTopic{}
 
 	err = gsl.UpdateByUuId()
 	if err != nil {
