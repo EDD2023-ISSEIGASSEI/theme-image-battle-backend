@@ -64,12 +64,23 @@ func (*PromptHandler) SubmitPrompt(ctx *gin.Context) {
 		ResultImageUrl: imageUrl,
 	}
 
+	f := true
 	gsl.Session.GeneratedQuestions = append(gsl.Session.GeneratedQuestions, gq)
 	for idx, ps := range gsl.Session.PlayerStates {
 		if ps.Player.Id == player.Id {
 			gsl.Session.PlayerStates[idx].IsCompleted = true
 		}
+		if !ps.IsCompleted {
+			f = false
+		}
 	}
+
+	if f {
+		gsl.Session.Phase = model.ShowScorePhase
+		gsl.Session.DealerPlayerId = gsl.Session.Players[0].Id
+		gsl.Session.ShowingPlayerId = gsl.Session.Players[1].Id
+	}
+
 	gsl.UpdateByUuId()
 	// ToDo: broadcast
 
