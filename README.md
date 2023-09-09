@@ -1,6 +1,6 @@
 # theme-image-battle-backend
 
-api仕様書（https://edd2023-isseigassei.github.io/theme-image-battle-backend/dist/）
+api仕様書 https://edd2023-isseigassei.github.io/theme-image-battle-backend/dist/
 
 ## Start Up
 1. mkcertをインストール
