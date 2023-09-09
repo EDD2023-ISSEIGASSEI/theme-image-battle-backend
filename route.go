@@ -76,4 +76,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	phaseHandler := handler.PhaseHandler{}
 	game.GET("gamePhase", phaseHandler.GetPhase)
 	game.GET("phaseState", phaseHandler.GetPhaseState)
+
+	gameHandler := handler.GameHandler{}
+	game.POST("start", gameHandler.GameStart)
 }
