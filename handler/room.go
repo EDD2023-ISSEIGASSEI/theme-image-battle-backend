@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"context"
+	"edd2023-back/db"
 	"edd2023-back/logic"
 	"edd2023-back/model"
 	"edd2023-back/util"
@@ -70,9 +72,22 @@ func (*RoomHandler) CreateRoom(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, rl.Room)
 }
 
-// func (*RoomHandler) ReadAllRooms(ctx *gin.Context) {
-// 	keys, err := client.Keys(context.Background(), "*").Result()
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// }
+type RoomListRes struct {
+	Rooms []model.Room `json:"rooms"`
+}
+
+func (*RoomHandler) ReadAllRooms(ctx *gin.Context) {
+	keys, err := db.RoomRedis.Keys(context.Background(), "*").Result()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var rooms []model.Room
+	rsl := logic.RoomSessionLogic{}
+	for _, k := range keys {
+		rsl.GetRoomSessionById(k)
+		rooms = append(rooms, rsl.Session.Room)
+	}
+
+	ctx.JSON(http.StatusOK, RoomListRes{Rooms: rooms})
+}
