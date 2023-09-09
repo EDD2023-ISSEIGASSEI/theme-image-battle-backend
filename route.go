@@ -84,4 +84,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 
 	topicHandler := handler.TopicHandler{}
 	game.GET("/topic", topicHandler.GetTopic)
+
+	promptHandler := handler.PromptHandler{}
+	game.POST("/prompt", promptHandler.SubmitPrompt)
 }
