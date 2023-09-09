@@ -72,4 +72,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 
 	game := app.Group("game")
 	game.Use(middleware.GameSessionCheck())
+
+	phaseHandler := handler.PhaseHandler{}
+	game.GET("gamePhase", phaseHandler.GetPhase)
 }
