@@ -17,6 +17,7 @@ func GameSessionCheck() gin.HandlerFunc {
 			r := util.BadRequest(&s)
 			log.Errorln("[Error]request parse error: ", s)
 			ctx.JSON(r.StatusCode, r.Message)
+			ctx.Abort()
 		}
 
 		gsl := logic.GameSessionLogic{
@@ -28,12 +29,13 @@ func GameSessionCheck() gin.HandlerFunc {
 			r := util.BadRequest(&s)
 			log.Errorln("[Error]request parse error: ", err.Error())
 			ctx.JSON(r.StatusCode, r.Message)
-			return
+			ctx.Abort()
 		}
 		if f && err != nil {
 			log.Errorln("[Error]exec error: ", err.Error())
 			r := util.InternalServerError(nil)
 			ctx.JSON(r.StatusCode, r.Message)
+			ctx.Abort()
 		}
 
 		ctx.Next()

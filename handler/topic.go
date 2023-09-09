@@ -37,20 +37,7 @@ func (*TopicHandler) GetTopic(ctx *gin.Context) {
 
 	gameSessionId, _ := ctx.Cookie("gameSessionId")
 	gsl := logic.GameSessionLogic{}
-	f, err = gsl.GetByUuid(gameSessionId)
-	if !f && err != nil {
-		s := "InvalidSessionId"
-		r := util.BadRequest(&s)
-		log.Errorln("[Error]request parse error: ", err.Error())
-		ctx.JSON(r.StatusCode, r.Message)
-		return
-	}
-	if f && err != nil {
-		log.Errorln("[Error]exec error: ", err.Error())
-		r := util.InternalServerError(nil)
-		ctx.JSON(r.StatusCode, r.Message)
-		return
-	}
+	gsl.GetByUuid(gameSessionId)
 
 	gsl.Session.PlayerTopics = append(gsl.Session.PlayerTopics, model.PlayerTopic{
 		Player:   player,
