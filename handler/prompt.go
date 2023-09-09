@@ -70,7 +70,7 @@ func (*PromptHandler) SubmitPrompt(ctx *gin.Context) {
 		if ps.Player.Id == player.Id {
 			gsl.Session.PlayerStates[idx].IsCompleted = true
 		}
-		if !ps.IsCompleted {
+		if !gsl.Session.PlayerStates[idx].IsCompleted {
 			f = false
 		}
 	}
