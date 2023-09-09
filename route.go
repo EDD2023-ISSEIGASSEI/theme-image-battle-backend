@@ -90,4 +90,9 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	gene.GET("/topic", topicHandler.GetTopic)
 	promptHandler := handler.PromptHandler{}
 	gene.POST("/prompt", promptHandler.SubmitPrompt)
+
+	guess := game.Group("")
+	guess.Use(middleware.GuessPhaseCheck())
+	answerHandler := handler.AnswerHandler{}
+	guess.POST("/answer", answerHandler.SubmitAnswer)
 }
