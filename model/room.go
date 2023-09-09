@@ -14,3 +14,12 @@ type CreateRoomRequest struct {
 	Password  string `json:"password"`
 	MaxMember int    `json:"maxMember"`
 }
+
+type RoomListResponse struct {
+	Rooms []Room `json:"rooms"`
+}
+
+type JoinRoomRequest struct {
+	Id       string `json:"id"`
+	Password string `json:"password"`
+}

@@ -495,7 +495,7 @@ components:
             type: object
             properties:
               id:
-                type: number
+                type: string
               password:
                 type: string
   responses:
@@ -535,9 +535,9 @@ components:
         password:
           type: string
         playerNum:
-          type: string
+          type: number
         maxPlayerNum:
-          type: string
+          type: number
         ownerPlayerId:
           type: string
     Phase:

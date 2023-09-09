@@ -19,9 +19,21 @@ func (rl *RoomLogic) CreateRoom(req model.CreateRoomRequest, userId string) erro
 		Id:            *id,
 		Name:          req.Name,
 		Password:      req.Password,
-		PlayerNum:     0,
+		PlayerNum:     1,
 		MaxPlayerNum:  req.MaxMember,
 		OwnerPlayerId: userId,
 	}
 	return nil
+}
+
+func (rl *RoomLogic) VaridatePassword(password string) bool {
+	return rl.Room.Password == password
+}
+
+func (rl *RoomLogic) CanJoin() bool {
+	return rl.Room.PlayerNum+1 <= rl.Room.MaxPlayerNum
+}
+
+func (rl *RoomLogic) Join() {
+	rl.Room.PlayerNum += 1
 }

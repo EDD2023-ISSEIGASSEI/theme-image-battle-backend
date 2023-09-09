@@ -48,3 +48,15 @@ func (rl *RoomSessionLogic) GetRoomSessionById(id string) (bool, error) {
 	rl.Session = roomSession
 	return true, nil
 }
+
+func (rl *RoomSessionLogic) UpdateRoomInfo(room model.Room) error {
+	var ctx = context.Background()
+	rl.Session.Room = room
+	jsonData, err := json.Marshal(rl.Session)
+	if err != nil {
+		log.Errorln("JsonMarshalError: ", err.Error())
+		return err
+	}
+	db.RoomRedis.GetSet(ctx, rl.Session.Room.Id, jsonData)
+	return nil
+}

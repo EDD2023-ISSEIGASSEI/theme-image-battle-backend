@@ -68,4 +68,5 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	roomHandler := handler.RoomHandler{}
 	app.POST("/room", roomHandler.CreateRoom)
 	app.GET("/room/list", roomHandler.ReadAllRooms)
+	app.POST("/room/join", roomHandler.JoinRoom)
 }
