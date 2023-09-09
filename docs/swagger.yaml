@@ -177,13 +177,7 @@ paths:
         - $ref: '#/components/parameters/SessionId'
         - $ref: '#/components/parameters/GameSessionId'
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                phase:
-                  $ref: '#/components/schemas/Phase'
+        content: {}
       responses:
         '200':
           description: OK
