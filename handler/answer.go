@@ -47,6 +47,7 @@ func (*AnswerHandler) SubmitAnswer(ctx *gin.Context) {
 		Answer: ans,
 	}
 	al.CalcScore()
+	ans.Score = al.Answer.Score
 
 	var q model.GeneratedQuestion
 	for _, gq := range gsl.Session.GeneratedQuestions {

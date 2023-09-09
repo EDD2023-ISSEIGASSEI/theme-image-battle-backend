@@ -278,12 +278,13 @@ paths:
         - $ref: '#/components/parameters/SessionId'
         - $ref: '#/components/parameters/GameSessionId'
       requestBody:
+        description: ''
         content:
           application/json:
             schema:
               type: object
               properties:
-                answer:
+                answers:
                   type: array
                   items:
                     type: string
