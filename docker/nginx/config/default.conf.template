@@ -7,14 +7,14 @@ server {
     ssl_certificate_key /etc/nginx/conf.d/ssl/${SSL_CERTIFICATE_KEY_FILE_NAME};
 
     location / {
-        # proxy_pass http://host.docker.internal:3000;
-        proxy_pass https://ambitious-bush-02b022900.3.azurestaticapps.net;
+        proxy_pass http://host.docker.internal:3000;
+        # proxy_pass https://ambitious-bush-02b022900.3.azurestaticapps.net;
         proxy_redirect off;
     }
 
     location /api {
-        # proxy_pass http://host.docker.internal:8080;
-        proxy_pass https://edd2023.azurewebsites.net;
+        proxy_pass http://host.docker.internal:8080;
+        # proxy_pass https://edd2023.azurewebsites.net;
         proxy_redirect off;
     }
 
