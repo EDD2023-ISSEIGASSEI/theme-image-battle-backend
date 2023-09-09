@@ -11,35 +11,41 @@ type User struct {
 }
 
 type Room struct {
-	Id           int // 6桁
-	Name         string
-	Password     string
-	PlayerNum    int
-	MaxPlayerNum int
+	Id           int    `json:"id"` // 6桁
+	Name         string `json:"name"`
+	Password     string `json:"password"`
+	PlayerNum    int    `json:"playerNum"`
+	MaxPlayerNum int    `json:"maxPlayerNum"`
 }
 
 type Player struct {
-	Id           string
-	Name         string
-	IconImageUrl string
+	Id           string `json:"id"`
+	Name         string `json:"name"`
+	IconImageUrl string `json:"iconImageUrl"`
 }
 
 type WaitingPhaseState struct {
-	RoomInfo Room
-	Players  []Player
+	RoomInfo Room     `json:"roomInfo"`
+	Players  []Player `json:"players"`
 }
 
 type Format = string // "<>をする<>"みたいにして、"<>"がblankであることを示す
 type Genre = string
 
 type Topic struct {
-	Format Format
-	Blanks []Genre
+	Format Format   `json:"format"`
+	Blanks []Genre  `json:"blanks"`
+	Words  []string `json:"words"`
+}
+
+type TopicForGuess struct {
+	Format Format  `json:"format"`
+	Blanks []Genre `json:"blanks"`
 }
 
 type PlayerTopic struct {
-	Player   Player
-	Question Topic
+	Player   Player `json:"player"`
+	Question Topic  `json:"question"`
 }
 
 type PlayerState struct {
@@ -49,58 +55,60 @@ type PlayerState struct {
 }
 
 type GeneratePhaseState struct {
-	PlayerStates []PlayerState
-	Time         int
+	PlayerStates []PlayerState `json:"playerStates"`
+	Time         int           `json:"time"`
 }
 
 type GeneratedQuestion struct {
-	Player         Player
-	Topic          Topic
-	Prompt         string
-	ResultImageUrl string
+	Player         Player `json:"player"`
+	Topic          Topic  `json:"topic"`
+	Prompt         string `json:"prompt"`
+	ResultImageUrl string `json:"resultImageUrl"`
 }
 
 type GeneratedQuestionForGuess struct {
-	Format         Format
-	ResultImageUrl string
+	TopicForGuess  TopicForGuess `json:"topicForGuess"`
+	ResultImageUrl string        `json:"resultImageUrl"`
 }
 
 type GuessPhaseState struct {
-	PlayerStates   []PlayerState
-	DealerPlayerId string
-	Question       GeneratedQuestionForGuess
-	Time           int
+	PlayerStates   []PlayerState             `json:"playerStates"`
+	DealerPlayerId string                    `json:"dealerPlayerId"`
+	Question       GeneratedQuestionForGuess `json:"question"`
+	Time           int                       `json:"time"`
 }
 
 type Answer struct {
-	Player       Player
-	BlankAnswers []string
-	Score        int
+	Player       Player   `json:"player"`
+	BlankAnswers []string `json:"blankAnswers"`
+	Score        int      `json:"score"`
 }
 
 type AnswerForQuestion struct {
-	DealerPlayerId   string
-	QuestionImageUrl string
-	Answers          []Answer
+	DealerPlayerId   string   `json:"dealerPlayerId"`
+	QuestionImageUrl string   `json:"questionImageUrl"`
+	Answers          []Answer `json:"answers"`
 }
 
 type ShowScorePhaseState struct {
-	PlayerStates    []PlayerState
-	DealerPlayerId  string
-	ShowingPlayerId string
-	Question        GeneratedQuestionForGuess
-	PlayerAnswer    AnswerForQuestion
+	PlayerStates    []PlayerState             `json:"playerStates"`
+	DealerPlayerId  string                    `json:"dealerPlayerId"`
+	ShowingPlayerId string                    `json:"showingPlayerId"`
+	Question        GeneratedQuestionForGuess `json:"question"`
+	PlayerAnswer    AnswerForQuestion         `json:"playerAnswer"`
 }
 
 type ShowCorrectAnswerPhaseState struct {
-	Question    GeneratedQuestion
-	Answers     []Answer
-	DealerScore int
+	Question    GeneratedQuestion `json:"question"`
+	Answers     []Answer          `json:"answers"`
+	DealerScore int               `json:"dealerScore"`
 }
 
 type EndingPhaseState struct {
-	Ranking []PlayerState
+	Ranking []PlayerState `json:"ranking"`
 }
+
+type Phase = string
 
 const (
 	WaitingPhase           = "WaitingPhase"
@@ -135,4 +143,40 @@ type GameSession struct {
 type RoomSession struct {
 	Room          Room
 	GameSessionId string
+}
+
+// request response
+type CreateRoomRequest struct {
+	Name      string `json:"name"`
+	Password  string `json:"password"`
+	MaxMember int    `json:"maxMember"`
+}
+
+type CreateRoomResponse struct {
+	Room Room `json:"room"`
+}
+
+type GetGamePhaseResponse struct {
+	Phase Phase `json:"phase"`
+}
+
+type GetRoomListResponse struct {
+	Rooms []Room `json:"rooms"`
+}
+
+type JoinRoomRequest struct {
+	Id       int    `json:"id"`
+	Password string `json:"password"`
+}
+
+type SubmitPromptRequest struct {
+	Prompt string `json:"prompt"`
+}
+
+type SubmitPromptResponse struct {
+	GeneratedImageUrl string `json:"generatedImageUrl"`
+}
+
+type SubmitAnswerRequest struct {
+	Answers []string `json:"answers"`
 }
