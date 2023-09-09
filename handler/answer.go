@@ -68,7 +68,7 @@ func (*AnswerHandler) SubmitAnswer(ctx *gin.Context) {
 		if ps.Player.Id == player.Id {
 			gsl.Session.PlayerStates[idx].IsCompleted = true
 		}
-		if !ps.IsCompleted {
+		if !gsl.Session.PlayerStates[idx].IsCompleted {
 			f = false
 		}
 		if ps.Player.Id == gsl.Session.DealerPlayerId {
@@ -78,18 +78,20 @@ func (*AnswerHandler) SubmitAnswer(ctx *gin.Context) {
 
 	// 全員回答が終わったら
 	if f {
-		for idx := range gsl.Session.PlayerStates {
-			gsl.Session.PlayerStates[idx].IsCompleted = false
-		}
 		// 次の親がいるなら
 		if dealerNum+1 < len(gsl.Session.Players) {
 			gsl.Session.DealerPlayerId = gsl.Session.Players[dealerNum+1].Id
-			gsl.Session.PlayerAnswers = []model.AnswerForQuestion{}
+			// gsl.Session.PlayerAnswers = []model.AnswerForQuestion{}
 		} else {
 			// 次の親がいないのなら
 			gsl.Session.Phase = model.ShowScorePhase
 			gsl.Session.DealerPlayerId = gsl.Session.Players[0].Id
 			gsl.Session.ShowingPlayerId = gsl.Session.Players[1].Id
+		}
+		for idx := range gsl.Session.PlayerStates {
+			if gsl.Session.PlayerStates[idx].Player.Id != gsl.Session.DealerPlayerId {
+				gsl.Session.PlayerStates[idx].IsCompleted = false
+			}
 		}
 	}
 

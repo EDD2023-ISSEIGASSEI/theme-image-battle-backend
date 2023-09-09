@@ -79,7 +79,9 @@ func (*PromptHandler) SubmitPrompt(ctx *gin.Context) {
 		gsl.Session.Phase = model.GuessPhase
 		gsl.Session.DealerPlayerId = gsl.Session.Players[0].Id
 		for idx := range gsl.Session.PlayerStates {
-			gsl.Session.PlayerStates[idx].IsCompleted = false
+			if gsl.Session.PlayerStates[idx].Player.Id != gsl.Session.DealerPlayerId {
+				gsl.Session.PlayerStates[idx].IsCompleted = false
+			}
 		}
 	}
 
