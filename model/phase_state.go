@@ -45,3 +45,8 @@ type ShowCorrectAnswerPhaseState struct {
 type EndingPhaseState struct {
 	Ranking []PlayerState `json:"ranking"`
 }
+
+type PhaseStateResponse struct {
+	Phase Phase `json:"phase"`
+	State any   `json:"state"`
+}

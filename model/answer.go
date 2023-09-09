@@ -7,7 +7,7 @@ type Answer struct {
 }
 
 type AnswerForQuestion struct {
-	DealerPlayerId   string   `json:"dealerPlayerId"`
-	QuestionImageUrl string   `json:"questionImageUrl"`
-	Answers          []Answer `json:"answers"`
+	DealerPlayerId   string `json:"dealerPlayerId"`
+	QuestionImageUrl string `json:"questionImageUrl"`
+	Answer           Answer `json:"answer"`
 }
