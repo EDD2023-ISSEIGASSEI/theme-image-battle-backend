@@ -65,6 +65,8 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	app := g.Group("")
 	app.Use(middleware.AuthSessionCheck())
 
+	app.GET("/user", userHandler.ValidateSessionId)
+
 	roomHandler := handler.RoomHandler{}
 	app.POST("/room", roomHandler.CreateRoom)
 	app.GET("/room/list", roomHandler.ReadAllRooms)
@@ -76,4 +78,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	phaseHandler := handler.PhaseHandler{}
 	game.GET("gamePhase", phaseHandler.GetPhase)
 	game.GET("phaseState", phaseHandler.GetPhaseState)
+
+	gameHandler := handler.GameHandler{}
+	game.POST("start", gameHandler.GameStart)
 }

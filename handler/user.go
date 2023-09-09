@@ -352,7 +352,7 @@ func (*UserHandler) ValidateSessionId(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, al.Session)
+	ctx.JSON(http.StatusOK, al.Session.User)
 }
 
 func (*UserHandler) SignOut(ctx *gin.Context) {

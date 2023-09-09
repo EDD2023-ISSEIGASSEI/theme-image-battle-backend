@@ -1,0 +1,4 @@
+CREATE TABLE formats (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  format VARCHAR(256)
+);
