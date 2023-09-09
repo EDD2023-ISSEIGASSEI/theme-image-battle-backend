@@ -1,5 +1,7 @@
 # theme-image-battle-backend
 
+api仕様書 https://edd2023-isseigassei.github.io/theme-image-battle-backend/dist/
+
 ## Start Up
 1. mkcertをインストール
 2. `/etc/hosts/`に証明書を発行する用のローカルドメインを用意  

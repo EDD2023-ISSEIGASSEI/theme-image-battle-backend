@@ -2,6 +2,7 @@ package main
 
 import (
 	"edd2023-back/handler"
+	"edd2023-back/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,20 +43,37 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 		})
 	})
 
+	auth := g.Group("auth")
+
 	userHandler := handler.UserHandler{}
-	g.POST("/signUp", userHandler.SignUp)
-	g.POST("/lineRegistration", userHandler.LineRegistration)
-	g.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
-	g.POST("/idIsExists", userHandler.IdIsExists)
-	g.POST("/checkOtp", userHandler.CheckOtp)
-	g.POST("/varidateSessionId", userHandler.ValidateSessionId)
-	g.POST("/signOut", userHandler.SignOut)
+	auth.POST("/signUp", userHandler.SignUp)
+	auth.POST("/lineRegistration", userHandler.LineRegistration)
+	auth.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
+	auth.POST("/idIsExists", userHandler.IdIsExists)
+	auth.POST("/checkOtp", userHandler.CheckOtp)
+	auth.POST("/varidateSessionId", userHandler.ValidateSessionId)
+	auth.POST("/signOut", userHandler.SignOut)
 
 	// lineDemoHandler := handler.LineDemoHandler{}
-	// g.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
+	// auth.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
 
 	linebotHandler := handler.LinebotHandler{}
 	g.POST("/linebot", func(ctx *gin.Context) {
 		linebotHandler.EventHandler(ctx, bot)
 	})
+
+	app := g.Group("")
+	app.Use(middleware.AuthSessionCheck())
+
+	roomHandler := handler.RoomHandler{}
+	app.POST("/room", roomHandler.CreateRoom)
+	app.GET("/room/list", roomHandler.ReadAllRooms)
+	app.POST("/room/join", roomHandler.JoinRoom)
+
+	game := app.Group("game")
+	game.Use(middleware.GameSessionCheck())
+
+	phaseHandler := handler.PhaseHandler{}
+	game.GET("gamePhase", phaseHandler.GetPhase)
+	game.GET("phaseState", phaseHandler.GetPhaseState)
 }
