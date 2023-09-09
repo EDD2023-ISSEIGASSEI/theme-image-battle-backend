@@ -206,6 +206,16 @@ paths:
       parameters:
         - $ref: '#/components/parameters/SessionId'
         - $ref: '#/components/parameters/GameSessionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rownd:
+                  type: number
+                  examples:
+                    - 2
       responses:
         '200':
           $ref: '#/components/responses/Message'
@@ -634,9 +644,7 @@ components:
         questionImageUrl:
           type: string
         answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Answer'
+          $ref: '#/components/schemas/Answer'
     Answer:
       type: object
       title: Answer
