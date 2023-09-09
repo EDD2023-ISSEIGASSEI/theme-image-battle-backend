@@ -529,7 +529,7 @@ components:
       title: Room
       properties:
         id:
-          type: number
+          type: string
         name:
           type: string
         password:
