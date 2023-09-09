@@ -158,11 +158,6 @@ func (*RoomHandler) JoinRoom(ctx *gin.Context) {
 		ctx.JSON(r.StatusCode, r.Message)
 		return
 	}
-	log.Debugln(rl.CanJoin())
-	log.Debugln(rl.Room.PlayerNum)
-	log.Debugln(rl.Room.MaxPlayerNum)
-	log.Debugln(rl.Room.PlayerNum + 1)
-	log.Debugln(rl.Room.PlayerNum+1 <= rl.Room.MaxPlayerNum)
 	if !rl.CanJoin() {
 		s := "CapacityOver"
 		r := util.BadRequest(&s)
