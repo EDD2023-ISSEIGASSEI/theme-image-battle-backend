@@ -416,16 +416,18 @@ components:
     SessionId:
       name: sessionId
       in: cookie
-      required: true
       schema:
         type: string
         format: uuid
+        examples:
+          - 108aa900-2a17-4d0f-aa43-5d9f08e10340
     GameSessionId:
       name: gameSessionId
       in: cookie
-      required: true
       schema:
         type: string
+        examples:
+          - 108aa900-2a17-4d0f-aa43-5d9f08e10340
   requestBodies:
     SignUp:
       content:
