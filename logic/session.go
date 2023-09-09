@@ -1,14 +1,11 @@
 package logic
 
 import (
-	"bytes"
 	"context"
-	"crypto/rand"
 	"edd2023-back/db"
 	"edd2023-back/model"
 	"edd2023-back/util"
 	"encoding/json"
-	"math/big"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -16,25 +13,6 @@ import (
 
 type SignUpSessionLogic struct {
 	Session model.SignUpSession
-}
-
-func generateOtp() (*string, error) {
-	ctx := context.Background()
-	var buffer bytes.Buffer
-	for {
-		for i := 0; i < 6; i++ {
-			n, err := rand.Int(rand.Reader, big.NewInt(10))
-			if err != nil {
-				return nil, err
-			}
-			buffer.WriteString(n.String())
-		}
-		otp := buffer.String()
-		res := db.Redis.Exists(ctx, otp).Val()
-		if res == 0 {
-			return &otp, nil
-		}
-	}
 }
 
 func (sl *SignUpSessionLogic) CreateSession() error {
@@ -82,13 +60,13 @@ type LineSessionLogic struct {
 func (sl *SignUpSessionLogic) LineRegisterByOtp(otp string) (bool, error) {
 	ctx := context.Background()
 	lineSessionByte, err := db.Redis.Get(ctx, otp).Bytes()
-	if err != nil {
-		log.Errorln("RedisReadError: ", err.Error())
-		return false, err
-	}
 	if lineSessionByte == nil {
 		log.Debug("Cannot find otp")
 		return false, nil
+	}
+	if err != nil {
+		log.Errorln("RedisReadError: ", err.Error())
+		return false, err
 	}
 	db.Redis.Del(ctx, otp)
 
@@ -105,7 +83,7 @@ func (sl *SignUpSessionLogic) LineRegisterByOtp(otp string) (bool, error) {
 
 func (ll *LineSessionLogic) Create() error {
 	var ctx = context.Background()
-	otp, err := generateOtp()
+	otp, err := util.GenerateOtp()
 	if err != nil {
 		log.Errorln("GenerateOtpError:", err.Error())
 		return err
@@ -127,7 +105,7 @@ type SignInSessionLogic struct {
 func (sl *SignInSessionLogic) CreateSession() error {
 	var ctx = context.Background()
 	sl.Session.Uuid = util.GenerateUuid()
-	otp, err := generateOtp()
+	otp, err := util.GenerateOtp()
 	if err != nil {
 		log.Errorln("GenerateOtpError:", err.Error())
 		return err

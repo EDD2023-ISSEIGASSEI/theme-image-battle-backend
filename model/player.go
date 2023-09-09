@@ -11,3 +11,11 @@ type PlayerState struct {
 	Score       int
 	IsCompleted bool
 }
+
+func UserToPlayer(user User) Player {
+	return Player{
+		Id:           user.Id,
+		Name:         user.Name,
+		IconImageUrl: user.IconImageUrl,
+	}
+}

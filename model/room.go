@@ -1,11 +1,12 @@
 package model
 
 type Room struct {
-	Id           string `json:"id"` // 6桁
-	Name         string `json:"name"`
-	Password     string `json:"password"`
-	PlayerNum    int    `json:"playerNum"`
-	MaxPlayerNum int    `json:"maxPlayerNum"`
+	Id            string `json:"id"` // 6桁
+	Name          string `json:"name"`
+	Password      string `json:"password"`
+	PlayerNum     int    `json:"playerNum"`
+	MaxPlayerNum  int    `json:"maxPlayerNum"`
+	OwnerPlayerId string `json:"ownerPlayerId"`
 }
 
 type CreateRoomRequest struct {

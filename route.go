@@ -42,20 +42,25 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 		})
 	})
 
+	auth := g.Group("auth")
+
 	userHandler := handler.UserHandler{}
-	g.POST("/signUp", userHandler.SignUp)
-	g.POST("/lineRegistration", userHandler.LineRegistration)
-	g.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
-	g.POST("/idIsExists", userHandler.IdIsExists)
-	g.POST("/checkOtp", userHandler.CheckOtp)
-	g.POST("/varidateSessionId", userHandler.ValidateSessionId)
-	g.POST("/signOut", userHandler.SignOut)
+	auth.POST("/signUp", userHandler.SignUp)
+	auth.POST("/lineRegistration", userHandler.LineRegistration)
+	auth.POST("/signIn", func(ctx *gin.Context) { userHandler.SignIn(ctx, bot) })
+	auth.POST("/idIsExists", userHandler.IdIsExists)
+	auth.POST("/checkOtp", userHandler.CheckOtp)
+	auth.POST("/varidateSessionId", userHandler.ValidateSessionId)
+	auth.POST("/signOut", userHandler.SignOut)
 
 	// lineDemoHandler := handler.LineDemoHandler{}
-	// g.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
+	// auth.POST("/lineDemo", lineDemoHandler.GenerateLineRegistrationOtp)
 
 	linebotHandler := handler.LinebotHandler{}
 	g.POST("/linebot", func(ctx *gin.Context) {
 		linebotHandler.EventHandler(ctx, bot)
 	})
+
+	roomHandler := handler.RoomHandler{}
+	g.POST("/room", roomHandler.CreateRoom)
 }
