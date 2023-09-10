@@ -17,31 +17,64 @@ func (*ShwoScoreHandler) Next(ctx *gin.Context) {
 
 	showingNum := 0
 	for _, p := range gsl.Session.Players {
-		showingNum++
 		if p.Id == gsl.Session.ShowingPlayerId {
 			break
 		}
-	}
-	// 表示されているユーザーの次のユーザーがいない
-	// もしくは、表示されているユーザーの次のユーザーがオーナーである
-	if showingNum+1 > len(gsl.Session.Players)-1 ||
-		(showingNum+1 == len(gsl.Session.Players)-1 &&
-			gsl.Session.Players[showingNum+1].Id == gsl.Session.DealerPlayerId) {
-		s := "NoNextPlayer"
-		r := util.BadRequest(&s)
-		ctx.JSON(r.StatusCode, r.Message)
-		return
+		showingNum++
 	}
 
 	nextNum := showingNum + 1
-	if gsl.Session.Players[nextNum].Id == gsl.Session.DealerPlayerId {
+	for {
+		if nextNum >= len(gsl.Session.Players) {
+			s := "NoNextPlayer"
+			r := util.BadRequest(&s)
+			ctx.JSON(r.StatusCode, r.Message)
+			return
+		}
+		if gsl.Session.Players[nextNum].Id != gsl.Session.DealerPlayerId {
+			break
+		}
 		nextNum += 1
 	}
 
+	gsl.Session.ShowingPlayerId = gsl.Session.Players[nextNum].Id
+	gsl.UpdateByUuId()
 	spsl := logic.ShowScorePhaseStateLigic{}
 	spsl.FromGameSession(gsl.Session)
-	gsl.Session.PlayerStates[showingNum].Score += spsl.State.PlayerAnswer.Answer.Score
-	gsl.Session.ShowingPlayerId = gsl.Session.Players[nextNum].Id
+	gsl.Session.PlayerStates[nextNum].Score += spsl.State.PlayerAnswer.Answer.Score
+	gsl.UpdateByUuId()
+	// ToDo: broadcast
+	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
+}
+
+func (*ShwoScoreHandler) Prev(ctx *gin.Context) {
+	gameSessionId, _ := ctx.Cookie("gameSessionId")
+	gsl := logic.GameSessionLogic{}
+	gsl.GetByUuid(gameSessionId)
+
+	showingNum := 0
+	for _, p := range gsl.Session.Players {
+		if p.Id == gsl.Session.ShowingPlayerId {
+			break
+		}
+		showingNum++
+	}
+
+	prevNum := showingNum - 1
+	for {
+		if prevNum < 0 {
+			s := "NoPrevPlayer"
+			r := util.BadRequest(&s)
+			ctx.JSON(r.StatusCode, r.Message)
+			return
+		}
+		if gsl.Session.Players[prevNum].Id != gsl.Session.DealerPlayerId {
+			break
+		}
+		prevNum -= 1
+	}
+
+	gsl.Session.ShowingPlayerId = gsl.Session.Players[prevNum].Id
 	gsl.UpdateByUuId()
 	// ToDo: broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})

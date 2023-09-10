@@ -100,4 +100,5 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	showScore.Use(middleware.ShowScorePhaseCheck(), middleware.OwnerCheck())
 	showScoreHandler := handler.ShwoScoreHandler{}
 	showScore.POST("/next", showScoreHandler.Next)
+	showScore.POST("/prev", showScoreHandler.Prev)
 }

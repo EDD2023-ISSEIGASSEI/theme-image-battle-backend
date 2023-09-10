@@ -88,6 +88,9 @@ func (*AnswerHandler) SubmitAnswer(ctx *gin.Context) {
 			gsl.Session.Phase = model.ShowScorePhase
 			gsl.Session.DealerPlayerId = gsl.Session.Players[0].Id
 			gsl.Session.ShowingPlayerId = gsl.Session.Players[1].Id
+			spsl := logic.ShowScorePhaseStateLigic{}
+			spsl.FromGameSession(gsl.Session)
+			gsl.Session.PlayerStates[1].Score += spsl.State.PlayerAnswer.Answer.Score
 		}
 		for idx := range gsl.Session.PlayerStates {
 			if gsl.Session.PlayerStates[idx].Player.Id != gsl.Session.DealerPlayerId {
