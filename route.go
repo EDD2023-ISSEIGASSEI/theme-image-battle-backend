@@ -95,4 +95,9 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	guess.Use(middleware.GuessPhaseCheck())
 	answerHandler := handler.AnswerHandler{}
 	guess.POST("/answer", answerHandler.SubmitAnswer)
+
+	showScore := game.Group("showScore")
+	showScore.Use(middleware.ShowScorePhaseCheck(), middleware.OwnerCheck())
+	showScoreHandler := handler.ShwoScoreHandler{}
+	showScore.POST("/next", showScoreHandler.Next)
 }
