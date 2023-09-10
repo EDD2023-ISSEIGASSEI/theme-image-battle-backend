@@ -60,3 +60,8 @@ func (rl *RoomSessionLogic) UpdateRoomInfo(room model.Room) error {
 	db.RoomRedis.GetSet(ctx, rl.Session.Room.Id, jsonData)
 	return nil
 }
+
+func (rl *RoomSessionLogic) DeleteSession() {
+	ctx := context.Background()
+	db.Redis.Del(ctx, rl.Session.Room.Id)
+}
