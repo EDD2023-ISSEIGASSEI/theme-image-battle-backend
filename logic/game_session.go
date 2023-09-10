@@ -90,3 +90,8 @@ func (gl *GameSessionLogic) JoinPlayer(player model.Player) {
 	gl.Session.Players = append(gl.Session.Players, player)
 	gl.Session.Room.PlayerNum += 1
 }
+
+func (gl *GameSessionLogic) DeleteSession() {
+	ctx := context.Background()
+	db.Redis.Del(ctx, gl.Session.Uuid)
+}

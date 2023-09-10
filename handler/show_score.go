@@ -2,6 +2,7 @@ package handler
 
 import (
 	"edd2023-back/logic"
+	"edd2023-back/model"
 	"edd2023-back/util"
 	"net/http"
 
@@ -75,6 +76,27 @@ func (*ShwoScoreHandler) Prev(ctx *gin.Context) {
 	}
 
 	gsl.Session.ShowingPlayerId = gsl.Session.Players[prevNum].Id
+	gsl.UpdateByUuId()
+	// ToDo: broadcast
+	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
+}
+
+func (*ShwoScoreHandler) End(ctx *gin.Context) {
+	gameSessionId, _ := ctx.Cookie("gameSessionId")
+	gsl := logic.GameSessionLogic{}
+	gsl.GetByUuid(gameSessionId)
+
+	dealerScore := 0
+	dealerNum := 0
+	for idx, ps := range gsl.Session.PlayerStates {
+		if ps.Player.Id != gsl.Session.DealerPlayerId {
+			dealerScore += ps.Score
+		} else {
+			dealerNum = idx
+		}
+	}
+	gsl.Session.Phase = model.ShowCorrectAnswerPhase
+	gsl.Session.PlayerStates[dealerNum].Score += dealerNum
 	gsl.UpdateByUuId()
 	// ToDo: broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})

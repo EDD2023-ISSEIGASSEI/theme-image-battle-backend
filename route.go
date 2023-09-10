@@ -83,6 +83,7 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	wait.Use(middleware.WaitingPhaseCheck())
 	gameHandler := handler.GameHandler{}
 	wait.POST("start", gameHandler.GameStart)
+	wait.POST("closeRoom", roomHandler.CloseRoom)
 
 	gene := game.Group("")
 	gene.Use(middleware.GeneratePhaseCheck())
@@ -101,4 +102,19 @@ func DefineRoutes(r gin.IRouter, bot *linebot.Client) {
 	showScoreHandler := handler.ShwoScoreHandler{}
 	showScore.POST("/next", showScoreHandler.Next)
 	showScore.POST("/prev", showScoreHandler.Prev)
+	showScore.POST("/end", showScoreHandler.End)
+
+	showAns := game.Group("")
+	showAns.Use(middleware.ShowCorrectAnswerPhaseCheck(), middleware.OwnerCheck())
+	shwoCorrectAnswereHandler := handler.ShwoCorrectAnswereHandler{}
+	showAns.POST("/showCorrectAnswer/next", shwoCorrectAnswereHandler.NextDealer)
+	roundHandler := handler.RoundHandler{}
+	showAns.POST("nextRound", roundHandler.NextRound)
+	endingHandler := handler.EndingHandler{}
+	showAns.POST("ending", endingHandler.Ending)
+
+	end := game.Group("")
+	end.Use(middleware.EndingPhaseCheck(), middleware.OwnerCheck())
+	waitingHandler := handler.WaitingHandler{}
+	end.POST("waiting", waitingHandler.Waiting)
 }

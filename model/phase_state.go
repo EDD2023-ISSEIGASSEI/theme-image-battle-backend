@@ -9,6 +9,7 @@ const (
 	ShowScorePhase         = "ShowScorePhase"
 	ShowCorrectAnswerPhase = "ShowCorrectAnswerPhase"
 	EndingPhase            = "EndingPhase"
+	ClosedPhase            = "ClosedPhase"
 )
 
 type WaitingPhaseState struct {
@@ -44,6 +45,9 @@ type ShowCorrectAnswerPhaseState struct {
 
 type EndingPhaseState struct {
 	Ranking []PlayerState `json:"ranking"`
+}
+
+type ClosedPhaseState struct {
 }
 
 type PhaseStateResponse struct {

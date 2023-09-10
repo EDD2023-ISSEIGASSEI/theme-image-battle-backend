@@ -53,6 +53,8 @@ func (*PhaseHandler) GetPhaseState(ctx *gin.Context) {
 		epsl := logic.EndingPhaseStateLigic{}
 		epsl.FromGameSession(gsl.Session)
 		state = epsl.State
+	case model.ClosedPhase:
+		state = nil
 	}
 
 	ctx.JSON(http.StatusOK, model.PhaseStateResponse{
