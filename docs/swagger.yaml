@@ -222,6 +222,19 @@ paths:
       servers:
         - url: 'https://shun.dev.host/api'
           description: ''
+  /game/closeRoom:
+    post:
+      summary: ''
+      operationId: post-game-closeRoom
+      parameters:
+        - $ref: '#/components/parameters/SessionId'
+        - $ref: '#/components/parameters/GameSessionId'
+      responses:
+        '200':
+          description: OK
+      servers:
+        - url: 'https://shun.dev.host/api'
+          description: ''
   /game/topic:
     get:
       summary: Your GET endpoint
