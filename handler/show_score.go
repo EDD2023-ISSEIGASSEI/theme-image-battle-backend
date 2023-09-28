@@ -44,7 +44,7 @@ func (*ShwoScoreHandler) Next(ctx *gin.Context) {
 	spsl.FromGameSession(gsl.Session)
 	gsl.Session.PlayerStates[nextNum].Score += spsl.State.PlayerAnswer.Answer.Score
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }
 
@@ -77,7 +77,7 @@ func (*ShwoScoreHandler) Prev(ctx *gin.Context) {
 
 	gsl.Session.ShowingPlayerId = gsl.Session.Players[prevNum].Id
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }
 
@@ -98,6 +98,6 @@ func (*ShwoScoreHandler) End(ctx *gin.Context) {
 	gsl.Session.Phase = model.ShowCorrectAnswerPhase
 	gsl.Session.PlayerStates[dealerNum].Score += dealerNum
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }

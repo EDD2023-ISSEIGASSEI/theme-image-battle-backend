@@ -40,6 +40,6 @@ func (*ShwoCorrectAnswereHandler) NextDealer(ctx *gin.Context) {
 	spsl.FromGameSession(gsl.Session)
 	gsl.Session.PlayerStates[nextShowingNum].Score += spsl.State.PlayerAnswer.Answer.Score
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }

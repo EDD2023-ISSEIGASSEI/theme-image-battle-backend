@@ -17,6 +17,6 @@ func (*WaitingHandler) Waiting(ctx *gin.Context) {
 
 	gsl.Session.Phase = model.WaitingPhase
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }

@@ -17,6 +17,6 @@ func (*EndingHandler) Ending(ctx *gin.Context) {
 
 	gsl.Session.Phase = model.EndingPhase
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }

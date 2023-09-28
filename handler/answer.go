@@ -100,7 +100,7 @@ func (*AnswerHandler) SubmitAnswer(ctx *gin.Context) {
 	}
 
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }

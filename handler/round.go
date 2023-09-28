@@ -32,6 +32,6 @@ func (*RoundHandler) NextRound(ctx *gin.Context) {
 		gsl.Session.PlayerStates[idx].IsCompleted = false
 	}
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }

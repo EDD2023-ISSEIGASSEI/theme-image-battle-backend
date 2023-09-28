@@ -18,7 +18,7 @@ type GameSessionLogic struct {
 
 func (rl *GameSessionLogic) CreateGameSession(player model.Player, room model.Room) error {
 	uuid := util.GenerateUuid()
-	// ToDo: wsConn追加
+	// TODO wsConn追加
 	rl.Session = model.GameSession{
 		Uuid:               uuid,
 		Phase:              model.WaitingPhase,
@@ -86,7 +86,7 @@ func (gl *GameSessionLogic) IsExistsPlayer(player model.Player) bool {
 }
 
 func (gl *GameSessionLogic) JoinPlayer(player model.Player) {
-	// ToDo: wsConn追加
+	// TODO wsConn追加
 	gl.Session.Players = append(gl.Session.Players, player)
 	gl.Session.Room.PlayerNum += 1
 }

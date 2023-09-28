@@ -11,7 +11,7 @@ type AnswerLogic struct {
 }
 
 func (al *AnswerLogic) CalcScore() error {
-	// ToDo: Calculate Score
+	// TODO Calculate Score
 	n, err := rand.Int(rand.Reader, big.NewInt(500))
 	if err != nil {
 		return err

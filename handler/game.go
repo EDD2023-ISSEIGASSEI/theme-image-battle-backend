@@ -86,7 +86,7 @@ func (*GameHandler) GameStart(ctx *gin.Context) {
 		return
 	}
 
-	// ToDo: broadcast
+	// TODO broadcast
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }

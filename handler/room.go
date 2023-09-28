@@ -193,7 +193,7 @@ func (*RoomHandler) JoinRoom(ctx *gin.Context) {
 		return
 	}
 
-	// ToDo: broadcast WaitingPhase
+	// TODO broadcast WaitingPhase
 
 	cookie := http.Cookie{
 		Name:     "gameSessionId",
@@ -216,6 +216,6 @@ func (*RoomHandler) CloseRoom(ctx *gin.Context) {
 
 	gsl.Session.Phase = model.ClosedPhase
 	gsl.UpdateByUuId()
-	// ToDo: broadcast
+	// TODO broadcast
 	ctx.JSON(http.StatusOK, gin.H{"message": "OK"})
 }
